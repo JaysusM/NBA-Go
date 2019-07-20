@@ -10,6 +10,7 @@ abstract class GameListEvent extends Equatable {
 }
 
 class FetchGameList extends GameListEvent {}
+class RefreshGameList extends GameListEvent {}
 
 abstract class GameListState extends Equatable {
     GameListState([List props = const []]) : super(props);
@@ -17,7 +18,13 @@ abstract class GameListState extends Equatable {
 
 class GameListEmpty extends GameListState {}
 class GameListLoading extends GameListState {}
-class GameListError extends GameListState {}
+class GameListError extends GameListState {
+  final String error;
+
+  GameListError({@required this.error})
+    : assert(error != null),
+      super([error]);
+}
 class GameListLoaded extends GameListState {
   final List<Game> games;
 
@@ -43,8 +50,15 @@ class GameListBloc extends Bloc<GameListEvent, GameListState> {
       try {
         final List<Game> games = await gameListRepository.getGameList();
         yield GameListLoaded(games: games);
-      } catch (_) {
-        yield GameListError();
+      } catch (error) {
+        yield GameListError(error: error);
+      }
+    } else if (event is RefreshGameList) {
+      try {
+        final List<Game> games = await gameListRepository.getGameList();
+        yield GameListLoaded(games: games);
+      } catch (error) {
+        yield GameListError(error: error);
       }
     }
   }

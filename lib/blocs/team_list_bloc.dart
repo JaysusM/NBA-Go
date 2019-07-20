@@ -17,7 +17,13 @@ abstract class TeamListState extends Equatable {
 
 class TeamListEmpty extends TeamListState {}
 class TeamListLoading extends TeamListState {}
-class TeamListError extends TeamListState {}
+class TeamListError extends TeamListState {
+  final String error;
+
+  TeamListError({@required this.error})
+    : assert(error != null),
+      super([error]);
+}
 class TeamListLoaded extends TeamListState {
   final List<Team> teams;
 
@@ -43,8 +49,8 @@ class TeamListBloc extends Bloc<TeamListEvent, TeamListState> {
       try {
         final List<Team> teams = await teamListRepository.getTeamList();
         yield TeamListLoaded(teams: teams);
-      } catch (_) {
-        yield TeamListError();
+      } catch (error) {
+        yield TeamListError(error: error);
       }
     }
   }

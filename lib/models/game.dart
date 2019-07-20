@@ -5,21 +5,21 @@ enum GameStatus {
 }
 
 enum Period {
-  FIRSTQUARTER,
-  SECONDQUARTER,
-  THIRDQUARTER,
-  FOURTHQUARTER,
-  FIRSTOVERTIME,
-  SECONDOVERTIME,
-  THIRDOVERTIME,
-  FOURTHOVERTIME
+  QT1,
+  QT2,
+  QT3,
+  QT4,
+  OT1,
+  OT2,
+  OT3,
+  OT4
 }
 
 class Game {
   //TODO: Add playoffs attribute and class
 
   final String gameId, clock;
-  final DateTime startTimeUTC;
+  final DateTime startTime;
   final Period period;
   final GameStatus status;
   final GameTeam hTeam;
@@ -28,7 +28,7 @@ class Game {
   Game.fromJSON(Map<String, dynamic> data) : 
     this.gameId = data['gameId'],
     this.clock = data['clock'],
-    this.startTimeUTC = DateTime.parse(data['startTimeUTC']),
+    this.startTime = DateTime.parse(data['startTimeUTC']).toLocal(),
     // We substract 1 because in API periods starts at 1 and in enums at 0
     this.period = Period.values[data['period']['current'] - 1],
     // Same as periods, we substract 1

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,9 +22,11 @@ class GameListView extends StatefulWidget {
 
 class GameListViewState extends State<GameListView> {
   GameListBloc _gameListBloc;
+  Completer _refreshCompleter;
 
   @override
   void initState() {
+    this._refreshCompleter = Completer<void>();
     this._gameListBloc = GameListBloc(gameListRepository: widget.gameListRepository);
     super.initState();
   }
@@ -46,14 +50,30 @@ class GameListViewState extends State<GameListView> {
               return Center(child: CircularProgressIndicator());
             } else if (state is GameListLoaded) {
               final List<Game> games = state.games;
-              return ListView.builder(
-                itemCount: games.length,
-                itemBuilder: (context, index) {
-                  return GameCard(game: games[index]);
+              
+              this._refreshCompleter?.complete();
+              this._refreshCompleter = Completer<void>();
+
+              return RefreshIndicator(
+                child: ListView.builder(
+                  itemCount: games.length,
+                  itemBuilder: (context, index) {
+                    return GameCard(game: games[index]);
+                  }
+                ),
+                onRefresh: () {
+                  _gameListBloc.dispatch(RefreshGameList());
+                  return this._refreshCompleter.future;
                 },
               );
-            } else {
-              return Center(child: Text('Error loading data', style: TextStyle(color: Colors.red)));
+            } else if (state is GameListError) {
+              print(state.error);
+              return Center(
+                child: Text(
+                  'Error loading game list', 
+                  style: TextStyle(color: Colors.red)
+                )
+              );
             }
           },
         ),

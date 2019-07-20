@@ -14,6 +14,8 @@ class NBAApiClient {
   Future<List<Game>> fetchTodayGameList() async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
     final String gameListURL = '$baseURL${nbaLinks.todayScoreboard}';
+    //Local Develop URL
+    //final String gameListURL = 'http://192.168.1.41:8000/scoreboard.json';
     final gameListResponse = await this.httpClient.get(gameListURL);
     if (gameListResponse.statusCode != 200)
       throw Exception('Error getting game list');

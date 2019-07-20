@@ -38,7 +38,7 @@ void main() {
   final GameListRepository gameListRepository = GameListRepository(nbaApiClient: nbaApiClient);
   final TeamListRepository teamListRepository = TeamListRepository(nbaApiClient: nbaApiClient);
 
-  // This will show state flow
+  // This will show BLoC state flow
   // BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(gameListRepository: gameListRepository, teamListRepository: teamListRepository));
 }
@@ -59,13 +59,19 @@ class App extends StatelessWidget {
           theme: ThemeData( 
             fontFamily: 'Roboto',
             primaryColor: const Color(0xFF4A4849),
-            accentColor: const Color(0XFF94926D),
+            accentColor: const Color(0XFF9C75F4),
             backgroundColor: const Color(0xFFDFDCDE),
             textTheme: TextTheme(
               body1: TextStyle(
                 fontFamily: 'Roboto',
-                fontWeight: FontWeight.w200
-              )
+                fontWeight: FontWeight.w200,
+                color: const Color(0xFF4A4849)
+              ),
+              body2: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w200,
+                color: Colors.red
+              ),
             )
           ),
           home: MultiBlocProvider(
