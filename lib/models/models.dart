@@ -1,1 +1,3 @@
-export 'game_list.dart';
+export 'game.dart';
+export 'team.dart';
+export 'links.dart';

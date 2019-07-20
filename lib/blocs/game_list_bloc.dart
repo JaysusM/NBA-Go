@@ -28,10 +28,10 @@ class GameListLoaded extends GameListState {
 }
 
 class GameListBloc extends Bloc<GameListEvent, GameListState> {
-  final GameListRepository gameRepository;
+  final GameListRepository gameListRepository;
 
-  GameListBloc({@required this.gameRepository})
-    : assert(gameRepository != null);
+  GameListBloc({@required this.gameListRepository})
+    : assert(gameListRepository != null);
 
   @override
   GameListState get initialState => GameListEmpty();
@@ -41,14 +41,11 @@ class GameListBloc extends Bloc<GameListEvent, GameListState> {
     if (event is FetchGameList) {
       yield GameListLoading();
       try {
-        final List<Game> games = await gameRepository.getGameList();
+        final List<Game> games = await gameListRepository.getGameList();
         yield GameListLoaded(games: games);
-      } catch (err) {
-        print(err);
+      } catch (_) {
         yield GameListError();
       }
     }
   }
-
-  
 }

@@ -5,6 +5,8 @@ import 'package:nba_go/blocs/game_list_bloc.dart';
 import 'package:nba_go/models/models.dart';
 import 'package:nba_go/repositories/game_list_repository.dart';
 
+import 'game_card.dart';
+
 class GameListView extends StatefulWidget {
 
   final GameListRepository gameListRepository;
@@ -21,7 +23,7 @@ class GameListViewState extends State<GameListView> {
 
   @override
   void initState() {
-    this._gameListBloc = GameListBloc(gameRepository: widget.gameListRepository);
+    this._gameListBloc = GameListBloc(gameListRepository: widget.gameListRepository);
     super.initState();
   }
 
@@ -33,30 +35,29 @@ class GameListViewState extends State<GameListView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-        bloc: _gameListBloc,
-        builder: (_, GameListState state) {
-          if (state is GameListEmpty) {
-            _gameListBloc.dispatch(FetchGameList());
-            return Center(child: Text('No games loaded'));
-          } else if (state is GameListLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is GameListLoaded) {
-            final List<Game> games = state.games;
-            return ListView.builder(
-              itemCount: games.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Text(
-                    '${games[index].hTeam.tricode} - ${games[index].vTeam.tricode}'
-                  ),
-                );
-              },
-            );
-          } else {
-            return Center(child: Text('Error loading data', style: TextStyle(color: Colors.red)));
-          }
-        },
+    return Container(
+        child: BlocBuilder(
+          bloc: _gameListBloc,
+          builder: (_, GameListState state) {
+            if (state is GameListEmpty) {
+              _gameListBloc.dispatch(FetchGameList());
+              return Center(child: Text('No games loaded'));
+            } else if (state is GameListLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is GameListLoaded) {
+              final List<Game> games = state.games;
+              return ListView.builder(
+                itemCount: games.length,
+                itemBuilder: (context, index) {
+                  return GameCard(game: games[index]);
+                },
+              );
+            } else {
+              return Center(child: Text('Error loading data', style: TextStyle(color: Colors.red)));
+            }
+          },
+        ),
+        color: Theme.of(context).backgroundColor,
       );
   }
 
