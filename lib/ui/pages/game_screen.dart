@@ -33,20 +33,22 @@ class _GameScreenView extends StatelessWidget {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor.withOpacity(1.0),
         appBar: AppBar(title: Text('NBA Go!')),
-        body: Column(
-          children: <Widget> [
-            Container(
-              child: SizedBox(
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                backgroundColor: Colors.transparent,
+                flexibleSpace: Container(
                 child: DateSelector(this.currentDate),
-                height: 60.0
+                margin: EdgeInsets.only(bottom: 8.0)
+                ),
+                expandedHeight: 60.0,
               ),
-              margin: EdgeInsets.only(bottom: 8.0)
-            ),
-            Expanded(
-              child: GameListView(),
-            )
-          ]
-        )
+            ];
+          }, body: GameListView(),
+        ) 
     );
   }
 }
