@@ -10,6 +10,10 @@ class GameListRepository {
     : assert(nbaApiClient != null);
 
   Future<List<Game>> getGameList() async {
-    return nbaApiClient.fetchTodayGameList();
+    return nbaApiClient.fetchGameList();
+  }
+
+  Future<List<Game>> getGameListWithDate(DateTime gameListDate) async {
+    return nbaApiClient.fetchGameListWithDate(gameListDate);
   }
 }

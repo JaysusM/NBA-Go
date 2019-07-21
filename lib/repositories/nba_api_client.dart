@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import 'package:nba_go/models/models.dart';
@@ -11,14 +12,22 @@ class NBAApiClient {
 
   NBAApiClient({@required this.httpClient}): assert(httpClient != null);
 
-  Future<List<Game>> fetchTodayGameList() async {
+  Future<List<Game>> fetchGameListWithDate(DateTime date) async {
+    return fetchGameList(date: DateFormat('yyyyMMdd').format(date));
+  }
+
+  Future<List<Game>> fetchGameList({String date}) async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
-    final String gameListURL = '$baseURL${nbaLinks.todayScoreboard}';
+    final String gameListURL = (date == null) 
+      ? '$baseURL${nbaLinks.todayScoreboard}'
+      : '$baseURL${nbaLinks.scoreboard(date)}';
     //Local Develop URL
     //final String gameListURL = 'http://192.168.1.41:8000/scoreboard.json';
     final gameListResponse = await this.httpClient.get(gameListURL);
-    if (gameListResponse.statusCode != 200)
-      throw Exception('Error getting game list');
+    if (gameListResponse.statusCode != 200) {
+      print('Received response status: ${gameListResponse.statusCode}, we returned empty game list');
+      return List<Game>();
+    }
     
     final gameListJSON = jsonDecode(gameListResponse.body);
     List<Game> games = new List<Game>();

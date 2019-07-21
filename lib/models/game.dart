@@ -34,13 +34,19 @@ class Game {
     // Same as periods, we substract 1
     this.status = GameStatus.values[data['statusNum'] - 1],
     this.hTeam = GameTeam.fromJSON(data['hTeam']),
-    this.vTeam = GameTeam.fromJSON(data['vTeam']);
+    this.vTeam = GameTeam.fromJSON(data['vTeam']) {
+      if(this.status == GameStatus.FINISHED) {        
+        this.hTeam.isWinner = (this.hTeam.score > this.vTeam.score);
+        this.vTeam.isWinner = (this.vTeam.score > this.hTeam.score);
+      }
+    }
 }
 
 class GameTeam {
   final String teamId, tricode;
   final int win, loss, seriesWin, seriesLoss, score;
   final List<int> lineScore;
+  bool _isWinner;
 
   GameTeam.fromJSON(Map<String, dynamic> data):
     this.teamId = data['teamId'],
@@ -54,4 +60,10 @@ class GameTeam {
     {
       data['linescore'].forEach((scoreEntry) => this.lineScore.add(int.parse(scoreEntry['score'])));        
     }
+
+  set isWinner(bool value) {
+    this._isWinner = value;
   }
+
+  bool get isWinner => this._isWinner;
+}

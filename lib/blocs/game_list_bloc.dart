@@ -10,7 +10,11 @@ abstract class GameListEvent extends Equatable {
 }
 
 class FetchGameList extends GameListEvent {}
-class RefreshGameList extends GameListEvent {}
+class RefreshGameList extends GameListEvent {
+  final DateTime refreshDate;
+
+  RefreshGameList({this.refreshDate});
+}
 
 abstract class GameListState extends Equatable {
     GameListState([List props = const []]) : super(props);
@@ -37,6 +41,10 @@ class GameListLoaded extends GameListState {
 class GameListBloc extends Bloc<GameListEvent, GameListState> {
   final GameListRepository gameListRepository;
 
+  // We will use this attribute in future "RefreshGameList" events
+  // Refreshing content when we change date
+  DateTime _lastLoadedDate;
+
   GameListBloc({@required this.gameListRepository})
     : assert(gameListRepository != null);
 
@@ -54,8 +62,15 @@ class GameListBloc extends Bloc<GameListEvent, GameListState> {
         yield GameListError(error: error);
       }
     } else if (event is RefreshGameList) {
+      yield GameListLoading();
       try {
-        final List<Game> games = await gameListRepository.getGameList();
+        List<Game> games;
+        if(event.refreshDate != null)
+          games = await gameListRepository.getGameListWithDate(event.refreshDate);
+        else if(this._lastLoadedDate != null)
+          games = await gameListRepository.getGameListWithDate(this._lastLoadedDate);
+        else
+          games = await gameListRepository.getGameList();
         yield GameListLoaded(games: games);
       } catch (error) {
         yield GameListError(error: error);
