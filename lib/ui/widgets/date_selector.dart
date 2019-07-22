@@ -88,7 +88,7 @@ class DateSelectorState extends State<DateSelector> {
                 ],
               ),
               width: DATE_ITEM_WIDTH,
-              height: 60.0,
+              height: 80.0,
               color: (this._currentDate.isAtSameMomentAs(dateItem))
                 ? Theme.of(context).backgroundColor
                 : Theme.of(context).focusColor

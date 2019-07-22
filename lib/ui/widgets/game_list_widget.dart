@@ -27,7 +27,7 @@ class GameListViewState extends State<GameListView> {
         builder: (_, GameListState state) {
           if (state is GameListEmpty) {
             BlocProvider.of<GameListBloc>(context).dispatch(FetchGameList());
-            return Center(child: Text('No games loaded'));
+            return Center(child: CircularProgressIndicator());
           } else if (state is GameListLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is GameListLoaded) {

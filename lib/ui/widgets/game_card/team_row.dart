@@ -13,6 +13,7 @@ class TeamRow extends StatelessWidget {
   Widget build(BuildContext context) {
     TeamListBloc teamListBloc = BlocProvider.of<TeamListBloc>(context);
     TextStyle textStyle = Theme.of(context).textTheme.body1;    
+    double logoWidth = textStyle.fontSize + 5;
 
     if(this.team.isWinner)
       textStyle = textStyle.copyWith(fontWeight: FontWeight.w300);
@@ -33,11 +34,21 @@ class TeamRow extends StatelessWidget {
           return Container(
             margin: EdgeInsets.all(5.0),
             child: Stack(
+              alignment: Alignment.center,
               children: <Widget>[
                 Align(
-                  child: Text(
-                    rowTeam.fullName,
-                    style: textStyle
+                  child: Row(
+                    children: <Widget>[ 
+                      Image.asset("assets/logos/${
+                        (rowTeam.isNBAFranchise) ? rowTeam.tricode.toLowerCase() : 'nba'
+                        }.gif", width: logoWidth
+                      ),
+                      Container(width: 5.0),
+                      Text(
+                        rowTeam.fullName,
+                        style: textStyle
+                      )
+                    ],
                   ),
                   alignment: Alignment.centerLeft
                 ),
