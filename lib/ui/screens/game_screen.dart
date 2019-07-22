@@ -42,9 +42,9 @@ class _GameScreenView extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 flexibleSpace: Container(
                 child: DateSelector(this.currentDate),
-                margin: EdgeInsets.only(bottom: 8.0)
+                margin: EdgeInsets.only(bottom: 12.0)
                 ),
-                expandedHeight: 60.0,
+                expandedHeight: 80.0,
               ),
             ];
           }, body: GameListView(),

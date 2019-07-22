@@ -12,7 +12,7 @@ class TeamRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TeamListBloc teamListBloc = BlocProvider.of<TeamListBloc>(context);
-    TextStyle textStyle = Theme.of(context).textTheme.body1;
+    TextStyle textStyle = Theme.of(context).textTheme.body1;    
 
     if(this.team.isWinner)
       textStyle = textStyle.copyWith(fontWeight: FontWeight.w300);

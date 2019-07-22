@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/repositories/repositories.dart';
-import 'package:nba_go/ui/pages/pages.dart';
+import 'package:nba_go/ui/screens/screens.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,28 +64,36 @@ class App extends StatelessWidget {
               body1: TextStyle(
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w200,
-                color: const Color(0xFF4A4849)
+                color: const Color(0xFF4A4849),
+                fontSize: 17.0
               ),
               body2: TextStyle(
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w200,
-                color: Colors.red
+                color: Colors.red,
+                fontSize: 17.0
               ),
               title: TextStyle(
                 fontFamily: 'Roboto',
-                fontSize: 14.0,
+                fontSize: 19.0,
                 color: Color(0xFF4A4849)
               ),
               subtitle: TextStyle(
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w100,
-                fontSize: 8.0,
+                fontSize: 11.0,
                 color: Color(0xFF4A4849)
               ),
               subhead: TextStyle(
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w100,
-                fontSize: 12.0,
+                fontSize: 15.0,
+                color: Color(0xFF4A4849)
+              ),
+              display1: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w300,
+                fontSize: 20.0,
                 color: Color(0xFF4A4849)
               )
             )

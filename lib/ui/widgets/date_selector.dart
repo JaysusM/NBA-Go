@@ -23,7 +23,7 @@ class DateSelectorState extends State<DateSelector> {
   DateTime _bottomLimit;
   DateTime _topLimit;
   ScrollController scrollController;
-  static const double DATE_ITEM_WIDTH = 45.0;
+  static const double DATE_ITEM_WIDTH = 60.0;
 
   DateSelectorState(this._currentDate)
     : assert(_currentDate != null);
@@ -57,13 +57,13 @@ class DateSelectorState extends State<DateSelector> {
                   Align(
                     child: Container(
                       child: Text(month, style: Theme.of(context).textTheme.subtitle),
-                      margin: EdgeInsets.only(top: 7.5),
+                      margin: EdgeInsets.only(top: 7.0),
                     ),
                     alignment: Alignment.topCenter,
                   ),
                   Align(
                     child: Container(
-                      child: Text(dateItem.day.toString()),
+                      child: Text(dateItem.day.toString(), style: Theme.of(context).textTheme.display1),
                       margin: EdgeInsets.only(top: 30.0),
                       ),
                     alignment: Alignment.center,
@@ -78,7 +78,7 @@ class DateSelectorState extends State<DateSelector> {
                   (dateItem.isAtSameMomentAs(this._currentDate))
                   ? Align(
                     child: Container(
-                      height: 1.0,
+                      height: 3.0,
                       width: 35.0,
                       color: Theme.of(context).primaryColor,
                     ),
@@ -106,7 +106,7 @@ class DateSelectorState extends State<DateSelector> {
           );
         },
       ),
-      elevation: 5.0
+      elevation: 12.0
     );
   }
 
