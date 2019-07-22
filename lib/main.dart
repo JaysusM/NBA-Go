@@ -53,11 +53,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'NBA GO!',
           theme: ThemeData( 
             fontFamily: 'Roboto',
             primaryColor: const Color(0xFF4A4849),
-            accentColor: const Color(0XFF9C75F4),
+            accentColor: const Color(0XFF72a276),
             backgroundColor: const Color(0xFFDFDCDE),
             focusColor: const Color(0xFFDFDCDE).withOpacity(0.3),
             textTheme: TextTheme(

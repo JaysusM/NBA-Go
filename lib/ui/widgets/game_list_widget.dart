@@ -6,6 +6,8 @@ import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/models/models.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
 
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 class GameListView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => GameListViewState();
@@ -22,14 +24,20 @@ class GameListViewState extends State<GameListView> {
 
   @override
   Widget build(BuildContext context) {
+    Widget loadingWidget = Center(child: SpinKitRipple(
+              duration: Duration(milliseconds: 750),
+              size: 100.0,
+              color: Theme.of(context).primaryColor,
+              )
+            );
     return BlocBuilder(
         bloc: BlocProvider.of<GameListBloc>(context),
         builder: (_, GameListState state) {
           if (state is GameListEmpty) {
             BlocProvider.of<GameListBloc>(context).dispatch(FetchGameList());
-            return Center(child: CircularProgressIndicator());
+            return loadingWidget;
           } else if (state is GameListLoading) {
-            return Center(child: CircularProgressIndicator());
+            return loadingWidget;
           } else if (state is GameListLoaded) {
             final List<Game> games = state.games;
             this._refreshCompleter?.complete();

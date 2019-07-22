@@ -110,6 +110,6 @@ class DateSelectorState extends State<DateSelector> {
     );
   }
 
-   // We substract 3 days as an offset to center the date in screen
-  double _calculateSelectedItemOffset() => (this._currentDate.difference(this._bottomLimit).inDays - 3) * DATE_ITEM_WIDTH;
+   // We substract 2 days as an offset to center the date in screen
+  double _calculateSelectedItemOffset() => (this._currentDate.difference(this._bottomLimit).inDays - 2) * DATE_ITEM_WIDTH;
 }

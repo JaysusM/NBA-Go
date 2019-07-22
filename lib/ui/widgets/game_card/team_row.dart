@@ -5,9 +5,11 @@ import 'package:nba_go/models/models.dart';
 
 class TeamRow extends StatelessWidget {
   final GameTeam team;
+  final GameStatus gameStatus;
 
-  TeamRow({@required this.team})
-    : assert(team != null);
+  TeamRow({@required this.team, @required this.gameStatus})
+    : assert(team != null),
+      assert(gameStatus != null);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class TeamRow extends StatelessWidget {
     TextStyle textStyle = Theme.of(context).textTheme.body1;    
     double logoWidth = textStyle.fontSize + 5;
 
-    if(this.team.isWinner)
+    if(this.gameStatus == GameStatus.FINISHED && team.isWinner)
       textStyle = textStyle.copyWith(fontWeight: FontWeight.w300);
 
     return BlocBuilder(

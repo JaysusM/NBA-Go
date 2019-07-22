@@ -22,9 +22,9 @@ class GameCard extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
-                TeamRow(team: game.vTeam),
+                TeamRow(team: game.vTeam, gameStatus: game.status),
                 Divider(height: 1.5, color: Theme.of(context).backgroundColor),
-                TeamRow(team: game.hTeam)
+                TeamRow(team: game.hTeam, gameStatus: game.status)
               ],
             ), 
             flex: 8,
