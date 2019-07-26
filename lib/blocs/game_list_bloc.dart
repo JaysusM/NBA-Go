@@ -65,9 +65,10 @@ class GameListBloc extends Bloc<GameListEvent, GameListState> {
       yield GameListLoading();
       try {
         List<Game> games;
-        if(event.refreshDate != null)
+        if(event.refreshDate != null) {
           games = await gameListRepository.getGameListWithDate(event.refreshDate);
-        else if(this._lastLoadedDate != null)
+          this._lastLoadedDate = event.refreshDate;
+        } else if(this._lastLoadedDate != null)
           games = await gameListRepository.getGameListWithDate(this._lastLoadedDate);
         else
           games = await gameListRepository.getGameList();

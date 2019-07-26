@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/repositories/repositories.dart';
-import 'package:nba_go/ui/screens/screens.dart';
+import 'package:nba_go/ui/app_scaffold.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,13 +54,14 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'NBA GO!',
+          title: 'NBA Go!',
           theme: ThemeData( 
             fontFamily: 'Roboto',
             primaryColor: const Color(0xFF4A4849),
-            accentColor: const Color(0XFF72a276),
+            accentColor: const Color(0xFFDFDCDE),
             backgroundColor: const Color(0xFFDFDCDE),
             focusColor: const Color(0xFFDFDCDE).withOpacity(0.3),
+            toggleableActiveColor: Colors.white,
             textTheme: TextTheme(
               body1: TextStyle(
                 fontFamily: 'Roboto',
@@ -75,9 +76,10 @@ class App extends StatelessWidget {
                 fontSize: 17.0
               ),
               title: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 19.0,
-                color: Color(0xFF4A4849)
+                fontFamily: 'OpenSansCondensed',
+                fontSize: 24.0,
+                fontStyle: FontStyle.italic,
+                color: Colors.white
               ),
               subtitle: TextStyle(
                 fontFamily: 'Roboto',
@@ -93,7 +95,7 @@ class App extends StatelessWidget {
               ),
               display1: TextStyle(
                 fontFamily: 'Roboto',
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.w500,
                 fontSize: 20.0,
                 color: Color(0xFF4A4849)
               )
@@ -106,11 +108,13 @@ class App extends StatelessWidget {
                 ),
               BlocProvider<TeamListBloc>(builder: (context) =>
               // ..dispatch will dispatch the event FetchTeamList so wherever we use this Bloc
-              // we will have the teams with the preloaded action done
+              // we should have the teams with the preloaded action done
               TeamListBloc(teamListRepository: teamListRepository)..dispatch(FetchTeamList())
               ),
             ],
-            child: GameScreen()
+            child: SafeArea(
+              child: AppScaffold()
+            )
         )
     );
   }

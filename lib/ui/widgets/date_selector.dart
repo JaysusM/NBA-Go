@@ -99,7 +99,7 @@ class DateSelectorState extends State<DateSelector> {
                   this.scrollController.animateTo(
                     _calculateSelectedItemOffset(), 
                     duration: Duration(seconds: 1), 
-                    curve: ElasticInOutCurve());
+                    curve: Curves.bounceOut);
                   BlocProvider.of<GameListBloc>(context).dispatch(RefreshGameList(refreshDate: this._currentDate));
                 });
             },
