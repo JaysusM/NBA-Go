@@ -55,12 +55,7 @@ class GameListViewState extends State<GameListView> {
             );
           } else if (state is GameListError) {
             print(state.error);
-            return Center(
-              child: Text(
-                'Error loading game list', 
-                style: TextStyle(color: Colors.red)
-              )
-            );
+            return ErrorMessageWidget(error: 'Error loading game list');
           }
           return Text("Error unknown GameList State", style: TextStyle(color: Colors.red));
         },

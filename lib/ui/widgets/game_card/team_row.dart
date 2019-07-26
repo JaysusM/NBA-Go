@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/team_list_bloc.dart';
 import 'package:nba_go/models/models.dart';
 
+import '../widgets.dart';
+
 class TeamRow extends StatelessWidget {
   final GameTeam team;
   final GameStatus gameStatus;
@@ -66,14 +68,10 @@ class TeamRow extends StatelessWidget {
           );
         } else if(state is TeamListError) {
           print(state.error);
-          return Center(
-            child: Text(
-              'Error loading team data'
-            ),
-          );
+          return ErrorMessageWidget(error: 'Error loading team list');
         }
 
-        return Text("Error unknown TeamList State", style: TextStyle(color: Colors.red));
+        return ErrorMessageWidget(error: 'Error unknown TeamList State');
       },
     );
   }

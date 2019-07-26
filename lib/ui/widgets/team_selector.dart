@@ -26,8 +26,16 @@ class _TeamSelectorState extends State<TeamSelector> {
           List<Team> teams = state.teams;
           return ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: teams.length,
-            itemBuilder: (BuildContext context, int index) => _teamCircle(teams[index], MediaQuery.of(context).size)
+            itemCount: teams.length+1,
+            //TODO Refactor this to add 'NBA' Team in first positions
+            itemBuilder: (BuildContext context, int index) {
+              Size size = MediaQuery.of(context).size;
+              if (index > 0 && teams[index-1].isNBAFranchise)
+                return _teamCircle(teams[index-1], size);
+              else if (index == 0)
+                return _teamCircle(null, size, nbaLogo: true);
+              return Container();
+            } 
           );
         } else
           return Center(
@@ -40,20 +48,18 @@ class _TeamSelectorState extends State<TeamSelector> {
     );
   }
 
-  Widget _teamCircle(Team team, Size size) {
-    return (team.isNBAFranchise) 
-    ? Container(
+  Widget _teamCircle(Team team, Size size, {bool nbaLogo}) {
+    return Container(
       child: CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white.withOpacity(0.3),
         child: Image.asset(
-          "assets/logos/${team.tricode.toLowerCase()}.gif",
-          fit: BoxFit.contain,
+          "assets/logos/${(nbaLogo != null && nbaLogo) ? 'nba' : team.tricode.toLowerCase()}.gif",
+          fit: BoxFit.cover,
         ),
       ),
       height: size.height*0.12,
       width: size.width*0.12,
       margin: EdgeInsets.all(5.0),
-    ) 
-    : Container();
+    );
   }
 }

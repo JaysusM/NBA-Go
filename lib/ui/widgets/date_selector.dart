@@ -24,6 +24,7 @@ class DateSelectorState extends State<DateSelector> {
   DateTime _topLimit;
   ScrollController scrollController;
   static const double DATE_ITEM_WIDTH = 60.0;
+  static const int GAMES_DATE_OFFSET = 30;
 
   DateSelectorState(this._currentDate)
     : assert(_currentDate != null);
@@ -31,8 +32,8 @@ class DateSelectorState extends State<DateSelector> {
   @override 
   void initState() {
     this.scrollController = ScrollController();
-    this._topLimit = this._currentDate.add(Duration(days: 300));
-    this._bottomLimit = this._currentDate.subtract(Duration(days: 300));
+    this._topLimit = this._currentDate.add(Duration(days: GAMES_DATE_OFFSET));
+    this._bottomLimit = this._currentDate.subtract(Duration(days: GAMES_DATE_OFFSET));
     super.initState();
     // This will scroll the ListView to the currentDate/SelectedDate
     WidgetsBinding.instance

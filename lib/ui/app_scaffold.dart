@@ -62,7 +62,7 @@ class AppScaffoldState extends State<AppScaffold> {
                 this._pageController.animateToPage(
                   index,
                   curve: Curves.bounceOut,
-                  duration: Duration(milliseconds: 400));
+                  duration: Duration(milliseconds: 700));
               }), 
               items: <BottomNavyBarItem>[
                 BottomNavyBarItem(

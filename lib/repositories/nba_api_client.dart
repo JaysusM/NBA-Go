@@ -48,6 +48,19 @@ class NBAApiClient {
     return teams;
   }
 
+  Future<List<Player>> fetchPlayerList() async {
+    final NBALinks nbaLinks = await NBALinks.nbaLinks;
+    final String playersURL = '$baseURL${nbaLinks.players}';
+    final playerListReponse = await this.httpClient.get(playersURL);
+    if(playerListReponse.statusCode != 200)
+      throw Exception('Error getting player list');
+
+    final playerListJSON = jsonDecode(playerListReponse.body);
+    List<Player> players = List<Player>();
+    playerListJSON['league']['standard'].forEach((player) => players.add(Player.fromJSON(player)));
+    return players;
+  }
+
   Future<Map<String, dynamic>> getNBALinksJSON() async {
     final String nbaLinksURL = '$baseURL/10s/prod/v1/today.json';
     final nbaLinksResponse = await this.httpClient.get(nbaLinksURL);

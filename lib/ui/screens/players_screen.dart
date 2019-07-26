@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
 
 class PlayersScreen extends StatefulWidget {
@@ -24,28 +25,31 @@ class PlayersScreenState extends State<PlayersScreen> {
 
   @override
   Widget build(BuildContext context) {
-  return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: AnimatedSwitcher(
-              child: _animatedWidgetContainer(),
-              duration: Duration(milliseconds: 500),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return FadeTransition(child: child, opacity: animation);
-              },
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            backgroundColor: Colors.transparent,
+            flexibleSpace: Container(
+              child: AnimatedSwitcher(
+                child: _animatedWidgetContainer(),
+                duration: Duration(milliseconds: 760),
+                switchInCurve: Curves.easeIn,
+                switchOutCurve: Curves.ease,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return SizeTransition(child: child, sizeFactor: animation);
+                },
+              ),
+              color: Colors.white.withOpacity(0.55),
+              padding: EdgeInsets.only(left: 10.0, right: 5.0),
+              margin: EdgeInsets.only(bottom: 12.0)
             ),
-            color: Colors.white.withOpacity(0.55),
-            padding: EdgeInsets.only(left: 10.0, right: 5.0),
+            expandedHeight: 80.0
           ),
-          flex: 2,
-        ),
-        Expanded(
-          child: Container(),
-          flex: 12,
-        )
-      ],
+        ];
+      }, body: PlayerList(),
     );
   }
 
@@ -53,7 +57,7 @@ class PlayersScreenState extends State<PlayersScreen> {
     this.setState(() {
       this._isSearch = !this._isSearch;
       this._animatedWidget = (_isSearch) ? _searchBar() : _teamSelector;
-      this._buttonIconData = (_isSearch) ? Icons.cancel : Icons.search;
+      this._buttonIconData = (_isSearch) ? LineIcons.reply : Icons.search;
       this._animatedKeyValue = (_isSearch) ? 1 : 2;
     });
   }
@@ -78,8 +82,11 @@ class PlayersScreenState extends State<PlayersScreen> {
   }
   
   Widget _searchBar() {
-    return TextField(
-      onChanged: (value) => _filterPlayers(value),
+    return Container(
+      child: TextField(
+        onChanged: (value) => _filterPlayers(value),
+      ),
+      margin: EdgeInsets.all(15.0),
     );
   }
 
