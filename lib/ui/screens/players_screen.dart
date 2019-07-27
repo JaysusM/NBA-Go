@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:nba_go/blocs/player_list_bloc.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
 
 class PlayersScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class PlayersScreenState extends State<PlayersScreen> {
   Widget _animatedWidget;
   IconData _buttonIconData;
   int _animatedKeyValue;
+  PlayerListBloc _playerListBloc;
 
   @override
   void initState() { 
@@ -25,6 +28,7 @@ class PlayersScreenState extends State<PlayersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    this._playerListBloc = BlocProvider.of<PlayerListBloc>(context);
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
@@ -91,6 +95,7 @@ class PlayersScreenState extends State<PlayersScreen> {
   }
 
   void _filterPlayers(String value) {    
-    //TODO Filter players in Bloc<PlayerLIst>
+    this._playerListBloc.dispatch(FilterPlayerListByValue(value.toLowerCase()));
+    this.setState(() {});
   }
 }

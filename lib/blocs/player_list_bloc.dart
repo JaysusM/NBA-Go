@@ -10,7 +10,19 @@ abstract class PlayerListEvent extends Equatable {
 
 class FetchPlayerList extends PlayerListEvent {}
 
-class FilterPlayerList extends PlayerListEvent {}
+class FilterPlayerListByValue extends PlayerListEvent {
+
+  String filter;
+
+  FilterPlayerListByValue(this.filter, [List props = const []]): super(props);
+}
+
+class FilterPlayerListByTeam extends PlayerListEvent {
+
+  Team team;
+
+  FilterPlayerListByTeam(this.team, [List props = const []]): super(props);
+}
 
 abstract class PlayerListState extends Equatable {
   PlayerListState([List props = const []]): super(props);
@@ -55,11 +67,17 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
       } catch (error) {
         yield PlayerListError(error: error);
       }
-    } else if (event is FilterPlayerList) {
-      if(allLoadedPlayers == null)
-        yield PlayerListError(error: 'Player list must be loaded first');
-      else
-        yield PlayerListLoaded(players: allLoadedPlayers);
+    } else if (event is FilterPlayerListByValue) {
+      yield PlayerListLoading();
+      try {
+        if(allLoadedPlayers == null)
+          yield PlayerListError(error: 'Player list must be loaded first');
+        else {
+          yield PlayerListLoaded(players: allLoadedPlayers.where((player) => player.fullName.toLowerCase().contains(event.filter)).toList());
+        }
+      } catch(error) {
+        yield PlayerListError(error: error);
+      }
     }   
   }
 

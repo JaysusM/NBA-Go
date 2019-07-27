@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/player_list_bloc.dart';
 import 'package:nba_go/models/models.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
+import 'dart:math';
 
 class PlayerList extends StatelessWidget {
 
@@ -20,14 +21,13 @@ class PlayerList extends StatelessWidget {
         else if (state is PlayerListError) {
           print(state.error);
           return ErrorMessageWidget(error: 'Error loading player list');
-        } else if (state is PlayerListLoaded)
+        } else if (state is PlayerListLoaded) {
           return PlayerListView(players: state.players);
-        else
+        } else
           return ErrorMessageWidget(error: 'Error. Unknown state for PlayerList $state');
       },
     );
   }
-
 }
 
 class PlayerListView extends StatefulWidget {
@@ -43,15 +43,15 @@ class PlayerListView extends StatefulWidget {
 class _PlayerListViewState extends State<PlayerListView> {
   
   ScrollController _scrollController;
-  List<Player> _shownPlayers;
-  final int NUMBER_OF_CARD_TO_LOAD = 20;
+  int _quantityPlayersShown;
+  static const int NUMBER_OF_CARD_TO_LOAD = 20;
   bool _showTopButton;
 
   @override
   void initState() {
     this._showTopButton = false;
     this._scrollController = ScrollController();
-    this._shownPlayers = widget.players.sublist(0, NUMBER_OF_CARD_TO_LOAD);
+    this._quantityPlayersShown = NUMBER_OF_CARD_TO_LOAD;
 
     this._scrollController.addListener(() {
       if(this._scrollController.position.pixels > 0.0)
@@ -73,9 +73,9 @@ class _PlayerListViewState extends State<PlayerListView> {
       children: <Widget>[
         ListView.builder(
           controller: this._scrollController,
-          itemCount: _shownPlayers.length,
+          itemCount: min(this._quantityPlayersShown, widget.players.length),
           itemBuilder: (BuildContext context, int index) {
-            return PlayerCard(player: _shownPlayers[index]);
+            return PlayerCard(player: widget.players[index]);
           },
         ),
         Positioned(
@@ -115,10 +115,7 @@ class _PlayerListViewState extends State<PlayerListView> {
 
   void loadMorePlayers() {
     this.setState(() {
-      if((widget.players.length - this._shownPlayers.length) > NUMBER_OF_CARD_TO_LOAD)
-        this._shownPlayers.addAll(widget.players.sublist(this._shownPlayers.length, this._shownPlayers.length + NUMBER_OF_CARD_TO_LOAD));
-      else
-        this._shownPlayers.addAll(widget.players.sublist(this._shownPlayers.length));
+      this._quantityPlayersShown += NUMBER_OF_CARD_TO_LOAD;
     });
   }
 }

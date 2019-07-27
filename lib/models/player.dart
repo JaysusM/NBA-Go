@@ -11,11 +11,11 @@ class Player {
     this._pos = decodedJSON['pos'];
   }
 
-  get firstName => this._firstName;
-  get lastName => this._lastName;
-  get personId => this._personId;
-  get teamId => this._teamId;
-  get jersey => this._jersey;
-  get pos => this._pos;
-
+  String get firstName => this._firstName;
+  String get lastName => this._lastName;
+  String get personId => this._personId;
+  String get teamId => this._teamId;
+  String get jersey => this._jersey;
+  String get pos => this._pos;
+  String get fullName => '$_lastName, $_firstName';
 }
