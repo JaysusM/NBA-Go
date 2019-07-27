@@ -31,7 +31,7 @@ class TeamRow extends StatelessWidget {
             child: Text('No teams loaded')
             );
         } else if (state is TeamListLoading) {
-          return CircularProgressIndicator();
+          return LoadingWidget();
         } else if (state is TeamListLoaded) {
           List<Team> teams = state.teams;
           Team rowTeam = teams.firstWhere((team) => team.teamId == this.team.teamId);

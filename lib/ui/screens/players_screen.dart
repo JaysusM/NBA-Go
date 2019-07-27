@@ -46,11 +46,11 @@ class PlayersScreenState extends State<PlayersScreen> {
                   return SizeTransition(child: child, sizeFactor: animation);
                 },
               ),
-              color: Colors.white.withOpacity(0.55),
+              color: Theme.of(context).primaryColor,
               padding: EdgeInsets.only(left: 10.0, right: 5.0),
-              margin: EdgeInsets.only(bottom: 12.0)
+              margin: EdgeInsets.all(5.0),
             ),
-            expandedHeight: 80.0
+            expandedHeight: 70.0
           ),
         ];
       }, body: PlayerList(),
@@ -76,10 +76,10 @@ class PlayersScreenState extends State<PlayersScreen> {
         ),
         Expanded(
           child: IconButton(
-            icon: Icon(this._buttonIconData, color: Theme.of(context).primaryColor), 
+            icon: Icon(this._buttonIconData, color: Colors.white), 
             onPressed: () => this._toggleAnimatedWidget()
           ),
-          flex: 1,
+          flex: 1
         )
       ]
     );
@@ -89,6 +89,15 @@ class PlayersScreenState extends State<PlayersScreen> {
     return Container(
       child: TextField(
         onChanged: (value) => _filterPlayers(value),
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white)
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white)
+          ),
+        ),
       ),
       margin: EdgeInsets.all(15.0),
     );

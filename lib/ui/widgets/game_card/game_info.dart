@@ -35,7 +35,7 @@ class GameInfo extends StatelessWidget {
           separator, 
           AutoSizeText(
             "${period.toString().split('.').last} - $clock",
-            style: Theme.of(context).textTheme.body2,
+            style: Theme.of(context).textTheme.caption,
             maxLines: 1,
           )
         ];

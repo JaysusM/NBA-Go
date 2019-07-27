@@ -36,7 +36,7 @@ class AppScaffoldState extends State<AppScaffold> {
         if(snapshot.hasData) {
           DateTime currentDate = snapshot.data.currentDate;
           return Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor.withOpacity(1.0),
+            backgroundColor: Theme.of(context).backgroundColor,
             appBar: AppBar(
               centerTitle: true,
               title: Text(
@@ -52,7 +52,7 @@ class AppScaffoldState extends State<AppScaffold> {
                 PlayersScreen()
               ],
             ),
-            bottomNavigationBar: BottomNavyBar(
+            bottomNavigationBar: BottomNavyBar(              
               iconSize: 24.0,
               backgroundColor: Theme.of(context).primaryColor,
               showElevation: true,

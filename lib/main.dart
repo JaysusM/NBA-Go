@@ -46,22 +46,28 @@ class App extends StatelessWidget {
       title: 'NBA Go!',
       theme: ThemeData( 
         fontFamily: 'Roboto',
-        primaryColor: const Color(0xFF4A4849),
-        accentColor: const Color(0xFFDFDCDE),
-        backgroundColor: const Color(0xFFDFDCDE),
-        focusColor: const Color(0xFFDFDCDE).withOpacity(0.3),
-        toggleableActiveColor: Colors.white,
+        primaryColor: const Color(0xFF333349),
+        accentColor: const Color(0xFF7E7F92),
+        backgroundColor: const Color(0xFF333349),
+        focusColor: const Color(0xFF7E7F92),
+        toggleableActiveColor: const Color(0xFFEA3742),
         textTheme: TextTheme(
           body1: TextStyle(
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w200,
-            color: const Color(0xFF4A4849),
+            color: const Color(0xFF333349),
+            fontSize: 17.0
+          ),
+          caption: TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w200,
+            color: Colors.red,
             fontSize: 17.0
           ),
           body2: TextStyle(
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w200,
-            color: Colors.red,
+            color: Colors.white,
             fontSize: 17.0
           ),
           title: TextStyle(
@@ -74,19 +80,19 @@ class App extends StatelessWidget {
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w100,
             fontSize: 11.0,
-            color: Color(0xFF4A4849)
+            color: Colors.white,
           ),
           subhead: TextStyle(
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w100,
             fontSize: 15.0,
-            color: Color(0xFF4A4849)
+            color: Colors.white,
           ),
           display1: TextStyle(
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w500,
             fontSize: 20.0,
-            color: Color(0xFF4A4849)
+            color: Colors.white,
           )
         )
       ),

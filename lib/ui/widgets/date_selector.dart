@@ -25,6 +25,7 @@ class DateSelectorState extends State<DateSelector> {
   ScrollController scrollController;
   static const double DATE_ITEM_WIDTH = 60.0;
   static const int GAMES_DATE_OFFSET = 30;
+  static const Color SELECTED_COLOR = Colors.white;
 
   DateSelectorState(this._currentDate)
     : assert(_currentDate != null);
@@ -81,7 +82,7 @@ class DateSelectorState extends State<DateSelector> {
                     child: Container(
                       height: 3.0,
                       width: 35.0,
-                      color: Theme.of(context).primaryColor,
+                      color: SELECTED_COLOR,
                     ),
                     alignment: Alignment.bottomCenter,
                   )
@@ -91,8 +92,8 @@ class DateSelectorState extends State<DateSelector> {
               width: DATE_ITEM_WIDTH,
               height: 80.0,
               color: (this._currentDate.isAtSameMomentAs(dateItem))
-                ? Theme.of(context).backgroundColor
-                : Theme.of(context).focusColor
+                ? Theme.of(context).toggleableActiveColor
+                : Theme.of(context).primaryColor,
             ),
             onTap: () {
               this.setState(() {

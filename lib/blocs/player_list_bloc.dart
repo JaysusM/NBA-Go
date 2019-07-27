@@ -49,6 +49,8 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
   
   // We will use this variable to filter players in event
   List<Player> allLoadedPlayers;
+  // We will use it to filter players after team changed
+  List<Player> shownPlayers;
 
   PlayerListBloc({@required this.playerListRepository})
     : assert(playerListRepository != null);
@@ -62,23 +64,34 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
       yield PlayerListLoading();
       try {
         List<Player> players = await playerListRepository.fetchPlayerList();
-        this.allLoadedPlayers = players;
+        this.allLoadedPlayers = this.shownPlayers = players;
         yield PlayerListLoaded(players: players);
       } catch (error) {
-        yield PlayerListError(error: error);
+        yield PlayerListError(error: error.toString());
       }
     } else if (event is FilterPlayerListByValue) {
+
+      yield PlayerListLoading();
+      try {
+        yield PlayerListLoaded(players: this.shownPlayers.where((player) => player.fullName.toLowerCase().contains(event.filter)).toList());
+      } catch(error) {
+        yield PlayerListError(error: error.toString());
+      }
+    } else if (event is FilterPlayerListByTeam) {
       yield PlayerListLoading();
       try {
         if(allLoadedPlayers == null)
-          yield PlayerListError(error: 'Player list must be loaded first');
-        else {
-          yield PlayerListLoaded(players: allLoadedPlayers.where((player) => player.fullName.toLowerCase().contains(event.filter)).toList());
+          this.allLoadedPlayers = this.shownPlayers = await playerListRepository.fetchPlayerList();
+        if (event.team != null) {
+          this.shownPlayers = allLoadedPlayers.where((player) => player.teamId == event.team.teamId).toList();
+          yield PlayerListLoaded(players: shownPlayers);
+        } else {
+          this.shownPlayers = allLoadedPlayers;
+          yield PlayerListLoaded(players: allLoadedPlayers);
         }
       } catch(error) {
-        yield PlayerListError(error: error);
+        yield PlayerListError(error: error.toString());
       }
-    }   
+    }
   }
-
 }

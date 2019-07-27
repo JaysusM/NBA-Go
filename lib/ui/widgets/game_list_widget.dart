@@ -44,7 +44,7 @@ class GameListViewState extends State<GameListView> {
                 : Center(
                   child: Text(
                     'No games scheduled on this date',
-                    style: Theme.of(context).textTheme.body1,
+                    style: Theme.of(context).textTheme.body2,
                   )
                 )
               ,
