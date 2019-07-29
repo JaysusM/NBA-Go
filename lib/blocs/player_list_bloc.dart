@@ -51,6 +51,8 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
   List<Player> allLoadedPlayers;
   // We will use it to filter players after team changed
   List<Player> shownPlayers;
+  // Will be useful to keep selected team after page changes
+  Team selectedTeam;
 
   PlayerListBloc({@required this.playerListRepository})
     : assert(playerListRepository != null);
@@ -65,6 +67,7 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
       try {
         List<Player> players = await playerListRepository.fetchPlayerList();
         this.allLoadedPlayers = this.shownPlayers = players;
+        this.selectedTeam = null;
         yield PlayerListLoaded(players: players);
       } catch (error) {
         yield PlayerListError(error: error.toString());
@@ -84,9 +87,11 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
           this.allLoadedPlayers = this.shownPlayers = await playerListRepository.fetchPlayerList();
         if (event.team != null) {
           this.shownPlayers = allLoadedPlayers.where((player) => player.teamId == event.team.teamId).toList();
+          this.selectedTeam = event.team;
           yield PlayerListLoaded(players: shownPlayers);
         } else {
           this.shownPlayers = allLoadedPlayers;
+          this.selectedTeam = null;
           yield PlayerListLoaded(players: allLoadedPlayers);
         }
       } catch(error) {

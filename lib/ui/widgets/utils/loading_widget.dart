@@ -8,7 +8,7 @@ class LoadingWidget extends StatelessWidget {
       child: SpinKitRipple (
         duration: Duration(milliseconds: 750),
         size: 100.0,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).toggleableActiveColor,
       )
     );
   }

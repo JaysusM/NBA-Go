@@ -32,17 +32,17 @@ class DateSelectorState extends State<DateSelector> {
   
   @override 
   void initState() {
-    this.scrollController = ScrollController();
     this._topLimit = this._currentDate.add(Duration(days: GAMES_DATE_OFFSET));
     this._bottomLimit = this._currentDate.subtract(Duration(days: GAMES_DATE_OFFSET));
+    this.scrollController = ScrollController(
+      initialScrollOffset: _calculateSelectedItemOffset()
+    );
     super.initState();
-    // This will scroll the ListView to the currentDate/SelectedDate
-    WidgetsBinding.instance
-     .addPostFrameCallback((_) => scrollController.jumpTo(_calculateSelectedItemOffset()));
   }
 
   @override
   Widget build(BuildContext context) {
+
   return Material(
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -91,6 +91,7 @@ class DateSelectorState extends State<DateSelector> {
               ),
               width: DATE_ITEM_WIDTH,
               height: 80.0,
+              margin: EdgeInsets.symmetric(horizontal: 0.1),
               color: (this._currentDate.isAtSameMomentAs(dateItem))
                 ? Theme.of(context).toggleableActiveColor
                 : Theme.of(context).primaryColor,

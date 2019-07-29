@@ -22,11 +22,12 @@ class GameListViewState extends State<GameListView> {
 
   @override
   Widget build(BuildContext context) {
+    GameListBloc gameListBloc = BlocProvider.of<GameListBloc>(context);
     return BlocBuilder(
-        bloc: BlocProvider.of<GameListBloc>(context),
+        bloc: gameListBloc,
         builder: (_, GameListState state) {
           if (state is GameListEmpty) {
-            BlocProvider.of<GameListBloc>(context).dispatch(FetchGameList());
+            gameListBloc.dispatch(FetchGameList());
             return LoadingWidget();
           } else if (state is GameListLoading) {
             return LoadingWidget();

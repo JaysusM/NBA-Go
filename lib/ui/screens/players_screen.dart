@@ -105,6 +105,5 @@ class PlayersScreenState extends State<PlayersScreen> {
 
   void _filterPlayers(String value) {    
     this._playerListBloc.dispatch(FilterPlayerListByValue(value.toLowerCase()));
-    this.setState(() {});
   }
 }

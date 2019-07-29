@@ -17,9 +17,14 @@ class AppScaffoldState extends State<AppScaffold> {
 
   @override
   void initState() { 
-    super.initState();
     this._currentIndex = 0;
     this._pageController = PageController(initialPage: 0);
+    this._pageController.addListener(() {
+      this.setState(() {
+        this._currentIndex = this._pageController.page.round();
+      });
+    });
+    super.initState();
   }
 
   @override

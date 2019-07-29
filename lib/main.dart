@@ -18,7 +18,7 @@ void main() {
   final PlayerListRepository playerListRepository = PlayerListRepository(nbaApiClient: nbaApiClient);
 
   // This will show BLoC state flow
-  // BlocSupervisor.delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(
     gameListRepository: gameListRepository, 
     teamListRepository: teamListRepository,

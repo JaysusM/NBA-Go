@@ -31,9 +31,11 @@ class GameListError extends GameListState {
 }
 class GameListLoaded extends GameListState {
   final List<Game> games;
+  final DateTime selectedDate;
 
-  GameListLoaded({@required this.games})
+  GameListLoaded({@required this.games, @required this.selectedDate})
     : assert(games != null),
+      assert(selectedDate != null),
       super([games]);
 
 }
@@ -57,7 +59,7 @@ class GameListBloc extends Bloc<GameListEvent, GameListState> {
       yield GameListLoading();
       try {
         final List<Game> games = await gameListRepository.getGameList();
-        yield GameListLoaded(games: games);
+        yield GameListLoaded(games: games, selectedDate: (await NBALinks.nbaLinks).currentDate);
       } catch (error) {
         yield GameListError(error: error);
       }
@@ -68,11 +70,14 @@ class GameListBloc extends Bloc<GameListEvent, GameListState> {
         if(event.refreshDate != null) {
           games = await gameListRepository.getGameListWithDate(event.refreshDate);
           this._lastLoadedDate = event.refreshDate;
-        } else if(this._lastLoadedDate != null)
+          yield GameListLoaded(games: games, selectedDate: this._lastLoadedDate);          
+        } else if(this._lastLoadedDate != null) {
           games = await gameListRepository.getGameListWithDate(this._lastLoadedDate);
-        else
+          yield GameListLoaded(games: games, selectedDate: this._lastLoadedDate);
+      } else {
           games = await gameListRepository.getGameList();
-        yield GameListLoaded(games: games);
+          yield GameListLoaded(games: games, selectedDate: (await NBALinks.nbaLinks).currentDate);
+      }
       } catch (error) {
         yield GameListError(error: error);
       }

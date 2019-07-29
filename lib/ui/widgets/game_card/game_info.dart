@@ -24,7 +24,7 @@ class GameInfo extends StatelessWidget {
     switch (this.gameStatus) {
       case GameStatus.NOTSTARTED:
         infoContent = <Widget>[
-          Text(startTimeString),
+          Text(startTimeString, style: Theme.of(context).textTheme.body1),
           separator,
           Text("-")
         ];
@@ -42,7 +42,7 @@ class GameInfo extends StatelessWidget {
         break;
       case GameStatus.FINISHED:
         infoContent = <Widget>[
-          Text(startTimeString),
+          Text(startTimeString, style: Theme.of(context).textTheme.body1),
           separator,
           AutoSizeText(
             (period.index < Period.OT1.index) ? "FT" : "FT - ${period.toString().split(".").last}",
@@ -59,7 +59,7 @@ class GameInfo extends StatelessWidget {
 
   Widget liveWidget(BuildContext context) {
     return Container(
-      child: Text('LIVE', style: Theme.of(context).textTheme.body2),
+      child: Text('LIVE', style: Theme.of(context).textTheme.caption),
       decoration: BoxDecoration(
         color: Colors.transparent,
         border: Border.all(

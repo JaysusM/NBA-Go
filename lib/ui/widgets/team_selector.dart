@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/blocs.dart';
@@ -22,7 +24,8 @@ class TeamSelector extends StatelessWidget {
             .where((team) => (team != null) && team.isNBAFranchise)
             .toList();
           teams.insert(0, null);
-          return TeamSelectorView(teams: teams);
+
+          return TeamSelectorView(teams: teams, selectedTeam: BlocProvider.of<PlayerListBloc>(context).selectedTeam);
         } else
           return ErrorWidget('Error. Unknown state of TeamListBloc: $state');
       }
@@ -32,8 +35,9 @@ class TeamSelector extends StatelessWidget {
 
 class TeamSelectorView extends StatefulWidget {
   final List<Team> teams;
+  final Team selectedTeam;
   
-  TeamSelectorView({@required this.teams})
+  TeamSelectorView({@required this.teams, @required this.selectedTeam})
     : assert(teams != null);
 
   _TeamSelectorViewState createState() => _TeamSelectorViewState();
@@ -41,14 +45,17 @@ class TeamSelectorView extends StatefulWidget {
 
 class _TeamSelectorViewState extends State<TeamSelectorView> {
 
+  Team _selectedTeam;
   int _selectedIndex;
   ScrollController _scrollController;
   static const double ITEM_SIZE = 40.0;
+  static const double WIDTH_MARGIN = 5.0;
 
   @override
   void initState() { 
-    this._scrollController = ScrollController();
-    this._selectedIndex = 0;
+    this._selectedTeam = widget.selectedTeam;
+    this._selectedIndex = max(widget.teams.indexOf(widget.selectedTeam), 0);
+    this._scrollController = ScrollController(initialScrollOffset: this._calculateSelectedOptionOffset());
     super.initState();
   }
 
@@ -56,7 +63,7 @@ class _TeamSelectorViewState extends State<TeamSelectorView> {
   Widget build(BuildContext context) {
     List<Team> teams = widget.teams;
     return ListView.builder(
-      controller: _scrollController,
+      controller: this._scrollController,
       scrollDirection: Axis.horizontal,
       itemCount: teams.length,
       itemBuilder: (BuildContext context, int index) {
@@ -67,8 +74,6 @@ class _TeamSelectorViewState extends State<TeamSelectorView> {
   }
 
   Widget _teamCircle(Team team, int index, PlayerListBloc playerListBloc, {bool nbaLogo}) {
-    double widthMargin = 5.0;
-    
     return Container(
         child: InkWell(
           child: Image.asset(
@@ -78,22 +83,27 @@ class _TeamSelectorViewState extends State<TeamSelectorView> {
           onTap: () {
             this.setState(() {
               this._selectedIndex = index;
-              this._scrollController.animateTo(
-                index*((ITEM_SIZE-3)+widthMargin*2),
+              this._selectedTeam = team;
+            });
+            this._scrollController.animateTo(
+                _calculateSelectedOptionOffset(),
                 duration: Duration(milliseconds: 500),
                 curve: Curves.elasticInOut
-              );
-            });
+            );
             playerListBloc.dispatch(FilterPlayerListByTeam(team));
           },
         ),
       height: ITEM_SIZE,
       width: ITEM_SIZE,
-      margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: widthMargin),
+      margin: EdgeInsets.symmetric(vertical: 7.0, horizontal: WIDTH_MARGIN),
       decoration: BoxDecoration(
-        color: (this._selectedIndex == index) ? Theme.of(context).toggleableActiveColor : Colors.white,
+        color: (this._selectedTeam == team) ? Theme.of(context).toggleableActiveColor : Colors.white,
         borderRadius: BorderRadius.circular(5.0)
       ),
     );
+  }
+
+  double _calculateSelectedOptionOffset() {
+    return max((this._selectedIndex-3), 0)*(ITEM_SIZE+WIDTH_MARGIN*2);
   }
 }
