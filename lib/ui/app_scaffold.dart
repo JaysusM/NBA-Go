@@ -19,11 +19,6 @@ class AppScaffoldState extends State<AppScaffold> {
   void initState() { 
     this._currentIndex = 0;
     this._pageController = PageController(initialPage: 0);
-    this._pageController.addListener(() {
-      this.setState(() {
-        this._currentIndex = this._pageController.page.round();
-      });
-    });
     super.initState();
   }
 
@@ -50,6 +45,11 @@ class AppScaffoldState extends State<AppScaffold> {
               )
             ),
             body: PageView (
+              onPageChanged: (index) {
+                this.setState(() {
+                  this._currentIndex = index;
+                });
+              },
               controller: this._pageController,
               children: <Widget>[
                 GameScreen(currentDate: currentDate),

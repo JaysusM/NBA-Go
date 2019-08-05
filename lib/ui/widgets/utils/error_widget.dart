@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ErrorMessageWidget extends StatelessWidget {
-  String error;
+  final String error;
   
   ErrorMessageWidget({@required this.error}) 
     : assert(error != null);
@@ -11,7 +11,7 @@ class ErrorMessageWidget extends StatelessWidget {
     return Center(
       child: Text(
         error,
-        style: Theme.of(context).textTheme.body2
+        style: Theme.of(context).textTheme.caption
       ),
     );
   }

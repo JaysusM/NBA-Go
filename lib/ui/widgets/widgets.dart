@@ -1,8 +1,9 @@
-export 'game_list_widget.dart';
-export 'game_card/game_card.dart';
-export 'date_selector.dart';
-export 'team_selector.dart';
+export 'games/game_list_widget.dart';
+export 'games/game_card/game_card.dart';
+export 'utils/date_selector.dart';
+export 'teams/team_selector.dart';
 export 'utils/loading_widget.dart';
-export 'player_card/player_card.dart';
-export 'player_list_widget.dart';
+export 'players/player_card/player_card.dart';
+export 'players/player_list_widget.dart';
 export 'utils/error_widget.dart';
+export 'players/player_detail_banner/player_detail_banner.dart';

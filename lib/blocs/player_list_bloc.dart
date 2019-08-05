@@ -12,14 +12,14 @@ class FetchPlayerList extends PlayerListEvent {}
 
 class FilterPlayerListByValue extends PlayerListEvent {
 
-  String filter;
+  final String filter;
 
   FilterPlayerListByValue(this.filter, [List props = const []]): super(props);
 }
 
 class FilterPlayerListByTeam extends PlayerListEvent {
 
-  Team team;
+  final Team team;
 
   FilterPlayerListByTeam(this.team, [List props = const []]): super(props);
 }

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/models/models.dart';
 
-import 'widgets.dart';
+import '../widgets.dart';
 
 class TeamSelector extends StatelessWidget {
   @override

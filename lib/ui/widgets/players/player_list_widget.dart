@@ -88,6 +88,7 @@ class _PlayerListViewState extends State<PlayerListView> {
             child: (this._showTopButton)
             ? Container(
               child: FloatingActionButton(
+                elevation: 3.0,
                 key: ValueKey(1),
                 backgroundColor: Theme.of(context).accentColor,
                 foregroundColor: Theme.of(context).primaryColor,
@@ -102,7 +103,8 @@ class _PlayerListViewState extends State<PlayerListView> {
                   );
                 },
               ),
-              margin: EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(5.5),
+              margin: EdgeInsets.all(0.0),
             ) : Container(key: ValueKey(2)),
             duration: Duration(milliseconds: 500)
           ),

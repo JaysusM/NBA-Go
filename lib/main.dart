@@ -16,13 +16,15 @@ void main() {
   final GameListRepository gameListRepository = GameListRepository(nbaApiClient: nbaApiClient);
   final TeamListRepository teamListRepository = TeamListRepository(nbaApiClient: nbaApiClient);
   final PlayerListRepository playerListRepository = PlayerListRepository(nbaApiClient: nbaApiClient);
+  final PlayerDetailRepository playerDetailRepository = PlayerDetailRepository(nbaApiClient: nbaApiClient);
 
   // This will show BLoC state flow
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  // BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(
     gameListRepository: gameListRepository, 
     teamListRepository: teamListRepository,
     playerListRepository: playerListRepository,
+    playerDetailRepository: playerDetailRepository
   ));
 }
 
@@ -30,12 +32,15 @@ class App extends StatelessWidget {
   final GameListRepository gameListRepository;
   final TeamListRepository teamListRepository;
   final PlayerListRepository playerListRepository;
+  final PlayerDetailRepository playerDetailRepository;
 
   App({Key key, @required this.gameListRepository, 
-  @required this.teamListRepository, @required this.playerListRepository})
+  @required this.teamListRepository, @required this.playerListRepository,
+  @required this.playerDetailRepository})
       : assert(gameListRepository != null),
         assert(teamListRepository != null),
         assert(playerListRepository != null),
+        assert(playerDetailRepository != null),
         super(key: key);
 
   @override
@@ -82,6 +87,12 @@ class App extends StatelessWidget {
             fontSize: 11.0,
             color: Colors.white,
           ),
+          headline: TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w300,
+            fontSize: 18.0,
+            color: Colors.white,
+          ),
           subhead: TextStyle(
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w100,
@@ -93,7 +104,7 @@ class App extends StatelessWidget {
             fontWeight: FontWeight.w500,
             fontSize: 20.0,
             color: Colors.white,
-          )
+          ),
         )
       ),
       home: MultiBlocProvider(
@@ -108,6 +119,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider<PlayerListBloc>(builder: (context) =>
             PlayerListBloc(playerListRepository: playerListRepository)..dispatch(FetchPlayerList())
+          ),
+          BlocProvider<PlayerDetailBloc>(builder: (context) =>
+            PlayerDetailBloc(playerDetailRepository: playerDetailRepository)
           )
         ],
         child: SafeArea(

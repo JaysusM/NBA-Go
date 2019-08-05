@@ -55,10 +55,23 @@ class NBAApiClient {
     if(playerListReponse.statusCode != 200)
       throw Exception('Error getting player list');
 
-    final playerListJSON = jsonDecode(playerListReponse.body);
+    final Map<String, dynamic> playerListJSON = jsonDecode(playerListReponse.body);
     List<Player> players = List<Player>();
     playerListJSON['league']['standard'].forEach((player) => players.add(Player.fromJSON(player)));
     return players;
+  }
+
+  Future<PlayerDetail> fetchPlayerDetail({Player player}) async {
+    final NBALinks nbaLinks = await NBALinks.nbaLinks;
+    final String playerProfileSuffix = nbaLinks.playerProfile.replaceAll('{{personId}}', player.personId);
+    final String playerDetailsURL = '$baseURL$playerProfileSuffix';
+    final playerDetailReponse = await this.httpClient.get(playerDetailsURL);
+
+    if(playerDetailReponse.statusCode != 200)
+      throw Exception('Error getting player details for player: ${player.personId}');
+    
+    final Map<String, dynamic> playerDetailJSON = jsonDecode(playerDetailReponse.body);
+    return PlayerDetail.fromJSON(playerDetailJSON, player);
   }
 
   Future<Map<String, dynamic>> getNBALinksJSON() async {

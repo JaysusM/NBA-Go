@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/team_list_bloc.dart';
 import 'package:nba_go/models/models.dart';
 
-import '../widgets.dart';
+import '../../widgets.dart';
 
 class TeamRow extends StatelessWidget {
   final GameTeam team;
