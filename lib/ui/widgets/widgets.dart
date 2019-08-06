@@ -7,3 +7,4 @@ export 'players/player_card/player_card.dart';
 export 'players/player_list_widget.dart';
 export 'utils/error_widget.dart';
 export 'players/player_detail_banner/player_detail_banner.dart';
+export 'players/player_stats/player_stats.dart';

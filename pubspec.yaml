@@ -1,5 +1,5 @@
 name: nba_go
-description: A new Flutter project.
+description: An unofficial NBA app.
 version: 1.0.0+1
 
 environment:
@@ -41,7 +41,13 @@ flutter:
           weight: 200
         - asset: assets/fonts/Roboto-Bold.ttf
           weight: 500
+        - asset: assets/fonts/Roboto-Black.ttf
+          weight: 600
     - family: OpenSansCondensed
       fonts:
         - asset: assets/fonts/OpenSansCondensed-LightItalic.ttf
           style: italic
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/fonts/RobotoCondensed-Bold.ttf
+          weight: 600

@@ -44,8 +44,8 @@ class TeamRow extends StatelessWidget {
                   child: Row(
                     children: <Widget>[ 
                       Image.asset("assets/logos/${
-                        (rowTeam.isNBAFranchise) ? rowTeam.tricode.toLowerCase() : 'nba'
-                        }.gif", width: logoWidth
+                        (rowTeam.isNBAFranchise) ? rowTeam.tricode.toUpperCase() + '.png' : 'nba.gif'
+                        }", width: logoWidth
                       ),
                       Container(width: 5.0),
                       Text(

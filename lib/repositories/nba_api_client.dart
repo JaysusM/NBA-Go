@@ -74,6 +74,20 @@ class NBAApiClient {
     return PlayerDetail.fromJSON(playerDetailJSON, player);
   }
 
+  Future<List<TeamStanding>> fetchConferenceStandings() async {
+    final NBALinks nbaLinks = await NBALinks.nbaLinks;
+    final String standingsConferenceURL = '$baseURL${nbaLinks.standingsConference}';
+    final standingsResponse = await this.httpClient.get(standingsConferenceURL);
+    if(standingsResponse.statusCode != 200)
+      throw Exception('Error getting conference standings list');
+
+    final Map<String, dynamic> teamStandingJSON = jsonDecode(standingsResponse.body);
+    List<TeamStanding> teamStandingList = List<TeamStanding>();
+    teamStandingJSON['league']['standard']['conference']['east'].forEach((team) => teamStandingList.add(TeamStanding.fromJSON(team, Conference.EAST)));
+    teamStandingJSON['league']['standard']['conference']['west'].forEach((team) => teamStandingList.add(TeamStanding.fromJSON(team, Conference.WEST)));
+    return teamStandingList;
+  }
+
   Future<Map<String, dynamic>> getNBALinksJSON() async {
     final String nbaLinksURL = '$baseURL/10s/prod/v1/today.json';
     final nbaLinksResponse = await this.httpClient.get(nbaLinksURL);

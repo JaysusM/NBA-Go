@@ -28,9 +28,9 @@ class PlayerProfilePic extends StatelessWidget {
         Positioned(
           child: SizedBox(
             child: Image.asset(
-                'assets/logos/${playerTeam.tricode.toLowerCase()}.gif',
+                'assets/logos/${playerTeam.tricode.toUpperCase()}.png',
                 fit: BoxFit.contain),
-            height: 22,
+            height: 30
           ),
           top: 5.0,
           left: 5.0,

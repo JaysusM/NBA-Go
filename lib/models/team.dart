@@ -10,4 +10,6 @@ class Team {
     this.tricode = decodedJSON['tricode'],
     this.teamId = decodedJSON['teamId'],
     this.confName = decodedJSON['confName'];
+
+  String get shortName => this.fullName.split(' ').last;
 }

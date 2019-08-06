@@ -7,11 +7,14 @@ import 'package:nba_go/ui/widgets/widgets.dart';
 class PlayerDetailScreen extends StatelessWidget {
   final Player player;
   final PlayerDetailBloc playerDetailBloc;
+  final Team team;
 
   const PlayerDetailScreen(
-      {@required this.playerDetailBloc, @required this.player})
+      {@required this.playerDetailBloc, @required this.player,
+      @required this.team})
       : assert(playerDetailBloc != null),
-        assert(player != null);
+        assert(player != null),
+        assert(team != null);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class PlayerDetailScreen extends StatelessWidget {
           if (state is PlayerDetailLoading)
             return LoadingWidget();
           else if (state is PlayerDetailLoaded)
-            return PlayerDetailView(playerDetail: state.playerDetail);
+            return PlayerDetailView(playerDetail: state.playerDetail, playerTeam: this.team);
           else if (state is PlayerDetailError)
             return ErrorMessageWidget(error: state.error);
           return ErrorMessageWidget(error: 'Unknown state $state');
@@ -36,15 +39,17 @@ class PlayerDetailScreen extends StatelessWidget {
 
 class PlayerDetailView extends StatelessWidget {
   final PlayerDetail playerDetail;
+  final Team playerTeam;
 
-  PlayerDetailView({@required this.playerDetail})
+  PlayerDetailView({@required this.playerDetail, @required this.playerTeam})
     : assert(playerDetail != null);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        PlayerDetailBanner(playerDetail: playerDetail)
+        SizedBox(child: PlayerDetailBanner(playerDetail: playerDetail, playerTeam: this.playerTeam), height: 190.0),
+        SizedBox(child: PlayerStats(playerDetail: playerDetail), height: 100.0)
       ]
     );
   }

@@ -68,7 +68,11 @@ class PlayerCard extends StatelessWidget {
       builder: (BuildContext context) {
         // TODO: Research. Is it possible to get BLoC from inside context?
         PlayerDetailBloc playerDetailBloc = BlocProvider.of<PlayerDetailBloc>(parentContext);
-        return PlayerDetailScreen(playerDetailBloc: playerDetailBloc, player: this.player);            
+        Team playerTeam =
+          (BlocProvider.of<TeamListBloc>(parentContext).currentState as TeamListLoaded)
+          .teams
+          .firstWhere((team) => team.teamId == player.teamId);
+        return PlayerDetailScreen(playerDetailBloc: playerDetailBloc, player: this.player, team: playerTeam);            
       }
     ));
   }

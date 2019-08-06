@@ -77,7 +77,7 @@ class _TeamSelectorViewState extends State<TeamSelectorView> {
     return Container(
         child: InkWell(
           child: Image.asset(
-            "assets/logos/${(nbaLogo != null && nbaLogo) ? 'nba' : team.tricode.toLowerCase()}.gif",
+            "assets/logos/${(nbaLogo != null && nbaLogo) ? 'nba.gif' : team.tricode.toUpperCase() + '.png'}",
             fit: BoxFit.contain,
           ),
           onTap: () {
