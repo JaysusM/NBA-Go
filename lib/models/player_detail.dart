@@ -22,18 +22,18 @@ class _SeasonStats {
 
   _SeasonStats.fromJSON(Map<String, dynamic> decodedJSON) {
     this._seasonYear = decodedJSON['seasonYear'];
-    this._ppg = double.parse(decodedJSON['ppg']);
-    this._apg = double.parse(decodedJSON['apg']);
-    this._rpg = double.parse(decodedJSON['rpg']);
-    this._mpg = double.parse(decodedJSON['mpg']);
-    this._topg = double.parse(decodedJSON['topg']);
-    this._spg = double.parse(decodedJSON['spg']);
-    this._bpg = double.parse(decodedJSON['bpg']);
-    this._tpp = double.parse(decodedJSON['tpp']);
-    this._ftp = double.parse(decodedJSON['ftp']);
-    this._fgp = double.parse(decodedJSON['fgp']);
-    this._plusMinus = double.parse(decodedJSON['plusMinus']);
-    this._min = double.parse(decodedJSON['min']);
+    this._ppg = _parseStat(statName: 'ppg', statMap: decodedJSON);
+    this._apg = _parseStat(statName: 'apg', statMap: decodedJSON);
+    this._rpg = _parseStat(statName: 'rpg', statMap: decodedJSON);
+    this._mpg = _parseStat(statName: 'mpg', statMap: decodedJSON);
+    this._topg = _parseStat(statName: 'topg', statMap: decodedJSON);
+    this._spg = _parseStat(statName: 'spg', statMap: decodedJSON);
+    this._bpg = _parseStat(statName: 'bpg', statMap: decodedJSON);
+    this._tpp = _parseStat(statName: 'tpp', statMap: decodedJSON);
+    this._ftp = _parseStat(statName: 'ftp', statMap: decodedJSON);
+    this._fgp = _parseStat(statName: 'fgp', statMap: decodedJSON);
+    this._plusMinus = _parseStat(statName: 'plusMinus', statMap: decodedJSON);
+    this._min = _parseStat(statName: 'min', statMap: decodedJSON);
   }
 
   int get seasonYear => this._seasonYear;
@@ -49,4 +49,9 @@ class _SeasonStats {
   double get fgp => this._fgp;
   double get plusMinus => this._plusMinus;
   double get min => this._min;
+
+  double _parseStat({@required String statName, @required Map<String, dynamic> statMap}) {
+    double statValue = double.parse(statMap[statName]);
+    return (statValue > 0) ? statValue : 0.0;
+  }
 }

@@ -49,7 +49,7 @@ class PlayerDetailView extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(child: PlayerDetailBanner(playerDetail: playerDetail, playerTeam: this.playerTeam), height: 190.0),
-        SizedBox(child: PlayerStats(playerDetail: playerDetail), height: 100.0)
+        SizedBox(child: PlayerStats(playerDetail: playerDetail), height: 250.0)
       ]
     );
   }

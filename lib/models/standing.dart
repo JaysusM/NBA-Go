@@ -4,16 +4,35 @@ enum Conference {
 }
 
 class TeamStanding {
-  final int win, loss, gamesBehind, confRank;
-  final double winPct;
-  final String teamId;
-  final Conference conference;
+  int _win, _loss, _gamesBehind, _confRank;
+  double _winPct;
+  String _teamId;
+  Conference _conference;
 
-  TeamStanding.fromJSON(Map<String, dynamic> decodedJSON, this.conference) :
-    this.win = int.parse(decodedJSON['win']),
-    this.loss = int.parse(decodedJSON['loss']),
-    this.winPct = double.parse(decodedJSON['winPct']),
-    this.gamesBehind = int.parse(decodedJSON['gamesBehind']),
-    this.confRank = int.parse(decodedJSON['confRank']),
-    this.teamId = decodedJSON['teamId'];
+  TeamStanding.fromJSON(Map<String, dynamic> decodedJSON, this._conference, int index) {
+    this._teamId = decodedJSON['teamId'];
+    this._win = int.parse(decodedJSON['win']);
+    this._loss = int.parse(decodedJSON['loss']);
+    this._gamesBehind = int.parse(decodedJSON['gamesBehind']);
+
+    try {
+      this._confRank = int.parse(decodedJSON['confRank']);
+    } catch(_) {
+      this._confRank = index;
+    }
+
+    try {
+      this._winPct = double.parse(decodedJSON['winPct']);
+    } catch (_) {
+      this._winPct = 0.0;
+    }
+  }
+
+  int get win => _win;
+  int get loss => _loss;
+  double get winPct => _winPct;
+  int get gamesBehind => _gamesBehind;
+  int get confRank => _confRank;
+  String get teamId => _teamId;
+  Conference get conference => _conference;
 }

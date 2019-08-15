@@ -4,7 +4,6 @@ import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/blocs/standings_bloc.dart';
 import 'package:nba_go/models/models.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class StandingsScreen extends StatelessWidget {
   @override
@@ -80,30 +79,30 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                       children: <Widget>[
                         InkWell(
                           child: SizedBox(
-                              child: CircleAvatar(
+                              child: Opacity(
                                   child: Image.asset('assets/logos/EAST.png',
                                       height: 60.0),
-                                  backgroundColor:
+                                  opacity:
                                       (selectedConference == Conference.EAST)
-                                          ? Colors.white.withOpacity(0.4)
-                                          : Colors.transparent),
-                              height: 80.0,
-                              width: 80.0),
+                                          ? 1.0
+                                          : 0.3),
+                              height: 40.0,
+                              width: 40.0),
                           onTap: () => this.setState(() {
                             this.selectedConference = Conference.EAST;
                           }),
                         ),
                         InkWell(
                           child: SizedBox(
-                              child: CircleAvatar(
+                              child: Opacity(
                                   child: Image.asset('assets/logos/WEST.png',
                                       height: 60.0),
-                                  backgroundColor:
+                                  opacity:
                                       (selectedConference == Conference.WEST)
-                                          ? Colors.white.withOpacity(0.4)
-                                          : Colors.transparent),
-                              height: 80.0,
-                              width: 80.0),
+                                          ? 1.0
+                                          : 0.3),
+                              height: 40.0,
+                              width: 40.0),
                           onTap: () => this.setState(() {
                             this.selectedConference = Conference.WEST;
                           }),
@@ -111,14 +110,16 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                       ],
                     ),
                     color: Theme.of(context).backgroundColor,
-                    height: 100.0),
+                    height: 50.0,
+                    padding: EdgeInsets.only(top: 10.0)
+                    ),
                 Container(
                   decoration: BoxDecoration(
                       color: Theme.of(context).backgroundColor,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.elliptical(70, 80),
                       )),
-                  height: 250.0,
+                  height: 200.0,
                   padding: EdgeInsets.only(top: 15.0, bottom: 10.0),
                   child: TopThreeTeamsStandings(
                       teamIterator: teamIterator, teamList: teamList),
@@ -141,7 +142,7 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Expanded(
-                                  child: Text("${index + 4}", style: textStyle),
+                                  child: Text("${index + 4}", style: textStyle.copyWith(fontWeight: FontWeight.w600)),
                                   flex: 2,
                                 ),
                                 Expanded(

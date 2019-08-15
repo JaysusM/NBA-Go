@@ -83,8 +83,19 @@ class NBAApiClient {
 
     final Map<String, dynamic> teamStandingJSON = jsonDecode(standingsResponse.body);
     List<TeamStanding> teamStandingList = List<TeamStanding>();
-    teamStandingJSON['league']['standard']['conference']['east'].forEach((team) => teamStandingList.add(TeamStanding.fromJSON(team, Conference.EAST)));
-    teamStandingJSON['league']['standard']['conference']['west'].forEach((team) => teamStandingList.add(TeamStanding.fromJSON(team, Conference.WEST)));
+    int index = 0;
+
+    teamStandingJSON['league']['standard']['conference']['east'].forEach(
+      (team) => 
+        teamStandingList.add(TeamStanding.fromJSON(team, Conference.EAST, ++index))
+    );
+
+    index = 0;
+
+    teamStandingJSON['league']['standard']['conference']['west'].forEach(
+      (team) => 
+        teamStandingList.add(TeamStanding.fromJSON(team, Conference.WEST, ++index))
+    );
     return teamStandingList;
   }
 

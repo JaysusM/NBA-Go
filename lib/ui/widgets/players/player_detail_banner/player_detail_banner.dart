@@ -34,8 +34,6 @@ class PlayerDetailBanner extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             color: Theme.of(context).backgroundColor,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15))));
+            ));
   }
 }

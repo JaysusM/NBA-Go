@@ -27,7 +27,7 @@ class TopThreeTeamsStandings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
             Image.asset(_getNextLogoPath(teamIterator, teamList),
-                height: 150.0),
+                height: 100.0),
             Container(height: 5.0),
             Text("$i",
                 style: Theme.of(context)
