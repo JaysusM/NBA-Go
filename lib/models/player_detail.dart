@@ -51,7 +51,8 @@ class _SeasonStats {
   double get min => this._min;
 
   double _parseStat({@required String statName, @required Map<String, dynamic> statMap}) {
-    double statValue = double.parse(statMap[statName]);
-    return (statValue > 0) ? statValue : 0.0;
+    String statValue = statMap[statName];
+    List<String> noValues = ['0', '-1', ''];
+    return (noValues.contains(statValue)) ? 0.0 : double.parse(statValue);
   }
 }

@@ -28,7 +28,7 @@ class PlayerInfo extends StatelessWidget {
     TextStyle headlineStyle =
         textTheme.headline.copyWith(fontSize: HEADLINE_SIZE);
     TextStyle subheadStyle = textTheme.subhead.copyWith(fontSize: SUBHEAD_SIZE);
-        return SizedBox(
+        return Container(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[

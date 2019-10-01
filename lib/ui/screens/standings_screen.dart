@@ -110,8 +110,8 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                       ],
                     ),
                     color: Theme.of(context).backgroundColor,
-                    height: 50.0,
-                    padding: EdgeInsets.only(top: 10.0)
+                    height: 70.0,
+                    padding: EdgeInsets.symmetric(vertical: 10.0)
                     ),
                 Container(
                   decoration: BoxDecoration(
