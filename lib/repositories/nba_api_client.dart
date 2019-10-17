@@ -61,6 +61,18 @@ class NBAApiClient {
     return players;
   }
 
+  Future<GameDetail> fetchGameStats(String date, String gameId) async {
+    final NBALinks nbaLinks = await NBALinks.nbaLinks;
+    final String playersURL = '$baseURL${nbaLinks.gameStats(date, gameId)}';
+    final playerListReponse = await this.httpClient.get(playersURL);
+    if(playerListReponse.statusCode != 200)
+      throw Exception('Error getting game stats');
+
+    final Map<String, dynamic> gameStatsJSON = jsonDecode(playerListReponse.body);
+    GameDetail gameDetail = GameDetail.fromJSON(gameStatsJSON);
+    return gameDetail;
+  }
+
   Future<PlayerDetail> fetchPlayerDetail({Player player}) async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
     final String playerProfileSuffix = nbaLinks.playerProfile.replaceAll('{{personId}}', player.personId);
