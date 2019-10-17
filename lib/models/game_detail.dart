@@ -39,7 +39,7 @@ class GameDetail {
 
 class GamePlayerStats {
   String _personId, _jersey, _firstName, _lastName, _min, _pts, _fgm, _fga, _fgp,
-  _ftm, _fta, _ftp, _tpm, _tpa, _tpp, _offReb, _defReb, _totReb, _ass, _pf, _stl, _to, _blk, _plusMinus;
+  _ftm, _fta, _ftp, _tpm, _tpa, _tpp, _offReb, _defReb, _totReb, _ast, _pf, _stl, _to, _blk, _plusMinus;
   bool _isOnCourt;
 
   GamePlayerStats.fromJSON(Map<String, dynamic> decodedJSON) {
@@ -61,7 +61,7 @@ class GamePlayerStats {
     this._offReb = decodedJSON['offReb'];
     this._defReb = decodedJSON['defReb'];
     this._totReb = decodedJSON['totReb'];
-    this._ass = decodedJSON['assists'];
+    this._ast = decodedJSON['assists'];
     this._pf = decodedJSON['pFouls'];
     this._stl = decodedJSON['steals'];
     this._to = decodedJSON['turnovers'];
@@ -88,7 +88,7 @@ class GamePlayerStats {
   String get offReb => _offReb;
   String get defReb => _defReb;
   String get totReb => _totReb;
-  String get ass => _ass;
+  String get ast => _ast;
   String get pf => _pf;
   String get stl => _stl;
   String get to => _to;

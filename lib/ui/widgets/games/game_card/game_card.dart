@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/game_stats.dart';
+import 'package:nba_go/ui/screens/screens.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
 
 import 'game_info.dart';
@@ -41,27 +42,24 @@ class GameCard extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 2.5),
           padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.5),
         ),
-        onTap: () => _showGameDetail(context));
+        onTap: () => (game.status == GameStatus.NOTSTARTED) ? null : _showGameDetail(context));
   }
 
   void _showGameDetail(BuildContext parentContext) {
     Navigator.of(parentContext)
         .push(new MaterialPageRoute(builder: (BuildContext context) {
+      String gameDate = this.game.gameDate;
+      String gameId = this.game.gameId;
+      BlocProvider.of<GameStatsBloc>(parentContext)
+          .dispatch(FetchGameStats(gameDate: gameDate, gameId: gameId));
       return BlocBuilder(
         bloc: BlocProvider.of<GameStatsBloc>(parentContext),
         builder: (BuildContext context, GameStatsState state) {
-          if (state is GameStatsEmpty) {
-            String gameDate = this.game.gameDate;
-            String gameId = this.game.gameId;
-            BlocProvider.of<GameStatsBloc>(parentContext)
-                .dispatch(FetchGameStats(gameDate: gameDate, gameId: gameId));
-            return LoadingWidget();
-          } else if (state is GameStatsLoading)
+          if (state is GameStatsLoading)
             return LoadingWidget();
           else if (state is GameStatsLoaded)
-            return GameDetailCard(state.gameStats);
-          else if (state is GameStatsError)
-            return ErrorWidget(state.error);
+            return GameDetailScreen(state.gameStats);
+          else if (state is GameStatsError) return ErrorWidget(state.error);
           return ErrorWidget("ERROR. It was not possible to load game stats.");
         },
       );
