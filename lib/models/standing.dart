@@ -4,8 +4,8 @@ enum Conference {
 }
 
 class TeamStanding {
-  int _win, _loss, _gamesBehind, _confRank;
-  double _winPct;
+  int _win, _loss, _confRank;
+  double _winPct, _gamesBehind;
   String _teamId;
   Conference _conference;
 
@@ -13,7 +13,7 @@ class TeamStanding {
     this._teamId = decodedJSON['teamId'];
     this._win = int.parse(decodedJSON['win']);
     this._loss = int.parse(decodedJSON['loss']);
-    this._gamesBehind = int.parse(decodedJSON['gamesBehind']);
+    this._gamesBehind = double.parse(decodedJSON['gamesBehind']);
 
     try {
       this._confRank = int.parse(decodedJSON['confRank']);
@@ -31,7 +31,7 @@ class TeamStanding {
   int get win => _win;
   int get loss => _loss;
   double get winPct => _winPct;
-  int get gamesBehind => _gamesBehind;
+  double get gamesBehind => _gamesBehind;
   int get confRank => _confRank;
   String get teamId => _teamId;
   Conference get conference => _conference;

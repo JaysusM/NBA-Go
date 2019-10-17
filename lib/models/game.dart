@@ -19,14 +19,14 @@ enum Period {
 class Game {
   //TODO: Add playoffs attribute and class
 
-  final String gameId, clock;
+  final String gameId, clock, gameDate;
   final DateTime startTime;
   final Period period;
   final GameStatus status;
   final GameTeam hTeam;
   final GameTeam vTeam;
 
-  Game.fromJSON(Map<String, dynamic> data) : 
+  Game.fromJSON(this.gameDate, Map<String, dynamic> data) : 
     this.gameId = data['gameId'],
     this.clock = data['clock'],
     this.startTime = DateTime.parse(data['startTimeUTC']).toLocal(),    

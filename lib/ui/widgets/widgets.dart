@@ -1,5 +1,6 @@
 export 'games/game_list_widget.dart';
 export 'games/game_card/game_card.dart';
+export 'games/game_detail_card.dart';
 export 'utils/date_selector.dart';
 export 'teams/team_selector.dart';
 export 'utils/loading_widget.dart';

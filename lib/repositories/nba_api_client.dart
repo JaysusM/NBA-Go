@@ -31,7 +31,7 @@ class NBAApiClient {
     
     final gameListJSON = jsonDecode(gameListResponse.body);
     List<Game> games = new List<Game>();
-    gameListJSON['games'].forEach((game) => games.add(Game.fromJSON(game)));
+    gameListJSON['games'].forEach((game) => games.add(Game.fromJSON(date, game)));
     return games;
   }
 
@@ -61,7 +61,7 @@ class NBAApiClient {
     return players;
   }
 
-  Future<GameDetail> fetchGameStats(String date, String gameId) async {
+  Future<GameDetail> fetchGameDetail(String date, String gameId) async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
     final String playersURL = '$baseURL${nbaLinks.gameStats(date, gameId)}';
     final playerListReponse = await this.httpClient.get(playersURL);

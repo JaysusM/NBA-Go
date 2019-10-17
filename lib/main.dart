@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:nba_go/blocs/blocs.dart';
+import 'package:nba_go/blocs/game_stats.dart';
 import 'package:nba_go/blocs/standings_bloc.dart';
 import 'package:nba_go/repositories/repositories.dart';
 import 'package:nba_go/repositories/standings_repository.dart';
@@ -25,6 +26,8 @@ void main() {
       PlayerDetailRepository(nbaApiClient: nbaApiClient);
   final StandingsRepository standingsRepository =
       StandingsRepository(nbaApiClient: nbaApiClient);
+  final GameDetailRepository gameDetailRepository =
+      GameDetailRepository(nbaApiClient: nbaApiClient);
 
   // This will show BLoC state flow
   // BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -33,6 +36,7 @@ void main() {
       teamListRepository: teamListRepository,
       playerListRepository: playerListRepository,
       playerDetailRepository: playerDetailRepository,
+      gameStatsRepository: gameDetailRepository,
       standingsRepository: standingsRepository));
 }
 
@@ -42,6 +46,7 @@ class App extends StatelessWidget {
   final PlayerListRepository playerListRepository;
   final PlayerDetailRepository playerDetailRepository;
   final StandingsRepository standingsRepository;
+  final GameDetailRepository gameStatsRepository;
 
   App(
       {Key key,
@@ -49,12 +54,14 @@ class App extends StatelessWidget {
       @required this.teamListRepository,
       @required this.playerListRepository,
       @required this.playerDetailRepository,
-      @required this.standingsRepository})
+      @required this.standingsRepository,
+      @required this.gameStatsRepository})
       : assert(gameListRepository != null),
         assert(teamListRepository != null),
         assert(playerListRepository != null),
         assert(playerDetailRepository != null),
         assert(standingsRepository != null),
+        assert(gameStatsRepository != null),
         super(key: key);
 
   @override
@@ -136,7 +143,11 @@ class App extends StatelessWidget {
           BlocProvider<StandingListBloc>(
               builder: (context) =>
                   StandingListBloc(standingRepository: standingsRepository)
-                  ..dispatch(FetchStandingList()))
+                  ..dispatch(FetchStandingList())),
+          BlocProvider<GameStatsBloc>(
+              builder: (context) =>
+                  GameStatsBloc(gameStatsRepository: gameStatsRepository)
+          )
         ], child: SafeArea(child: AppScaffold())));
   }
 }

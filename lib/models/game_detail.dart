@@ -1,34 +1,44 @@
 class GameDetail {
-  String _gameId;
-  List<int> _homeTeamLinescore, _awayTeamLinescore;
+  String _gameId, _homeTeamId, _awayTeamId, _homeTricode, _awayTricode;
+  List<String> _homeTeamLinescore, _awayTeamLinescore;
   List<GamePlayerStats> _homePlayers, _awayPlayers;
-  int _homeTeamId, _awayTeamId;
 
   GameDetail.fromJSON(Map<String, dynamic> decodedJSON) {
     this._gameId = decodedJSON['basicGameData']['gameId'];
-    this._homeTeamLinescore = decodedJSON['basicGameData']['hTeam']['linescore'];
-    this._awayTeamLinescore = decodedJSON['basicGameData']['vTeam']['linescore'];
+
+    this._homeTeamLinescore = new List<String>();
+    decodedJSON['basicGameData']['hTeam']['linescore'].forEach((lineScore) => this._homeTeamLinescore.add(lineScore['score']));
+    this._awayTeamLinescore = new List<String>();
+    decodedJSON['basicGameData']['vTeam']['linescore'].forEach((lineScore) => this._awayTeamLinescore.add(lineScore['score']));
+
     this._homeTeamId = decodedJSON['basicGameData']['hTeam']['teamId'];
     this._awayTeamId = decodedJSON['basicGameData']['vTeam']['teamId'];
+
+    this._homeTricode = decodedJSON['basicGameData']['hTeam']['triCode'];
+    this._awayTricode = decodedJSON['basicGameData']['vTeam']['triCode'];
+
     this._homePlayers = new List<GamePlayerStats>();
     this._awayPlayers = new List<GamePlayerStats>();
-    List<Map<String, dynamic>> activePlayers = decodedJSON['stats']['activePlayers'];
+    List<dynamic> activePlayers = decodedJSON['stats']['activePlayers'];
     for(Map<String, dynamic> player in activePlayers) {
-      if (player['teamId'] == this._homeTeamId) {
+      if (player['teamId'] == this._homeTeamId)
         this._homePlayers.add(GamePlayerStats.fromJSON(player));
-      } else {
+      else
         this._awayPlayers.add(GamePlayerStats.fromJSON(player));
-      }
     }
   }
 
   String get gameId => _gameId;
-  List<int> get homeTeamLinescore => _homeTeamLinescore;
-  List<int> get awayTeamLinescore => _awayTeamLinescore;
+  String get homeTricode => _homeTricode;
+  String get awayTricode => _awayTricode;
+  List<GamePlayerStats> get homePlayers => _homePlayers;
+  List<GamePlayerStats> get awayPlayers => _awayPlayers;
+  List<String> get homeTeamLinescore => _homeTeamLinescore;
+  List<String> get awayTeamLinescore => _awayTeamLinescore;
 }
 
 class GamePlayerStats {
-  String _personId, _jersey, _firstName, _lastName, _min, _fgm, _fga, _fgp,
+  String _personId, _jersey, _firstName, _lastName, _min, _pts, _fgm, _fga, _fgp,
   _ftm, _fta, _ftp, _tpm, _tpa, _tpp, _offReb, _defReb, _totReb, _ass, _pf, _stl, _to, _blk, _plusMinus;
   bool _isOnCourt;
 
@@ -37,6 +47,7 @@ class GamePlayerStats {
     this._jersey = decodedJSON['jersey'];
     this._firstName = decodedJSON['firstName'];
     this._lastName = decodedJSON['lastName'];
+    this._pts = decodedJSON['points'];
     this._min = decodedJSON['min'];
     this._fgm = decodedJSON['fgm'];
     this._fga = decodedJSON['fga'];
@@ -60,6 +71,7 @@ class GamePlayerStats {
   }
 
   String get personId => _personId;
+  String get pts => _pts;
   String get jersey => _jersey;
   String get firstName => _firstName;
   String get lastName => _lastName;
