@@ -6,7 +6,7 @@ class NBALinks {
   static Future<NBALinks> nbaLinks = _createNBALinks();
   static const _PLAYER_PROFILE_IMAGE_BASE_URL =
       "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{{personId}}.png";
-  String _todayScoreboard, _gameScoreboard, _teams, _players, _playerProfile, _standingsConference, _gameStats;
+  String _todayScoreboard, _gameScoreboard, _teams, _players, _playerProfile, _standingsConference, _gameStats, _date;
   DateTime _currentDate;
 
   static Future<NBALinks> _createNBALinks() async {
@@ -24,6 +24,7 @@ class NBALinks {
     this._gameStats = linksJSON['boxscore'];
     this._standingsConference = linksJSON['leagueConfStandings'];
     this._currentDate = DateTime.parse(linksJSON['currentDate']);
+    this._date = linksJSON['currentDate'];
   }
 
   String get todayScoreboard => _todayScoreboard;
@@ -32,6 +33,7 @@ class NBALinks {
   String get playerProfile => _playerProfile;
   String get standingsConference => _standingsConference;
   DateTime get currentDate => _currentDate;
+  String get date => _date;
   String scoreboard(String gameDate) => _gameScoreboard.replaceAll("{{gameDate}}", gameDate);
   String gameStats(String gameDate, String gameId) {
     String gameStatURL = this._gameStats.replaceAll("{{gameDate}}", gameDate);

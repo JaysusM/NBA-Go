@@ -16,7 +16,6 @@ dependencies:
   flutter_spinkit: ^3.1.0
   bottom_navy_bar: ^5.1.0
   line_icons: ^0.2.0
-  data_tables: ^1.0.1
   cupertino_icons: ^0.1.2
 
 dev_dependencies:

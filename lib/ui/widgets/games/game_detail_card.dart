@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nba_go/models/game_detail.dart';
-import 'package:data_tables/data_tables.dart';
 import 'package:nba_go/models/links.dart';
 
 class GameDetailCard extends StatefulWidget {
@@ -15,35 +14,24 @@ class GameDetailCard extends StatefulWidget {
 class GameDetailCardState extends State<GameDetailCard> {
   List<GamePlayerStats> players;
   bool homePlayersSelected;
-  int sortedIndex;
 
   @override
   void initState() {
-    this.players = widget.gameDetail.homePlayers;
-    this.homePlayersSelected = true;
-    this.sortedIndex = null;
+    this.players = widget.gameDetail.awayPlayers;
+    this.homePlayersSelected = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-            "${widget.gameDetail.awayTricode} @ ${widget.gameDetail.homeTricode}"),
-      ),
-      body: NativeDataTable.builder(
-          alwaysShowDataTable: true,
-          sortAscending: true,
-          rowsPerPage: this.players.length,
-          itemCount: this.players.length,
-          sortColumnIndex: this.sortedIndex,
-          itemBuilder: (int index) {
-            return DataRow.byIndex(
-                index: index, cells: _getDataCells(index));
-          },
-          header: Row(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+              "${widget.gameDetail.awayTricode} @ ${widget.gameDetail.homeTricode}"),
+        ),
+        body: Column(children: <Widget>[
+          Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -56,9 +44,20 @@ class GameDetailCardState extends State<GameDetailCard> {
                   widget.gameDetail.homePlayers, true, this.homePlayersSelected)
             ],
           ),
-          actions: <Widget>[],
-          columns: _getDataColumns()),
-    );
+          Expanded(
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                          columnSpacing: 10.0,
+                          rows: this
+                              .players
+                              .map((player) =>
+                                  DataRow(cells: _getDataCells(player)))
+                              .toList(),
+                          columns: _getDataColumns()))))
+        ]));
   }
 
   Widget _buttonSetTeamPlayers(
@@ -76,7 +75,6 @@ class GameDetailCardState extends State<GameDetailCard> {
       ),
       onTap: () {
         this.setState(() {
-          this.sortedIndex = null;
           this.players = players;
           this.homePlayersSelected = isHome;
         });
@@ -84,39 +82,46 @@ class GameDetailCardState extends State<GameDetailCard> {
     );
   }
 
-  List<DataCell> _getDataCells(int index) {
+  List<DataCell> _getDataCells(GamePlayerStats player) {
     return <DataCell>[
-      DataCell(Row(children: <Widget>[
-        CircleAvatar(
-            backgroundColor: Colors.white,
-            child: FadeInImage.assetNetwork(
-              placeholder: "assets/players_placeholder.png",
-              image: NBALinks.getPlayerProfilePic(this.players[index].personId),
-            )),
-        Container(width: 10.0),
-        Text(
-            this.players[index].lastName + ", " + this.players[index].firstName)
-      ])),
-      DataCell(Text(this.players[index].min)),
-      DataCell(Text(this.players[index].pts)),
-      DataCell(Text(this.players[index].totReb)),
-      DataCell(Text(this.players[index].ast)),
-      DataCell(Text(this.players[index].fgm)),
-      DataCell(Text(this.players[index].fga)),
-      DataCell(Text(this.players[index].fgp)),
-      DataCell(Text(this.players[index].ftm)),
-      DataCell(Text(this.players[index].fta)),
-      DataCell(Text(this.players[index].ftp)),
-      DataCell(Text(this.players[index].tpm)),
-      DataCell(Text(this.players[index].tpa)),
-      DataCell(Text(this.players[index].tpp)),
-      DataCell(Text(this.players[index].offReb)),
-      DataCell(Text(this.players[index].defReb)),
-      DataCell(Text(this.players[index].stl)),
-      DataCell(Text(this.players[index].blk)),
-      DataCell(Text(this.players[index].to)),
-      DataCell(Text(this.players[index].plusMinus)),
-      DataCell(Text(this.players[index].pf))
+      DataCell(Container(
+          child: Row(children: <Widget>[
+            CircleAvatar(
+                backgroundColor: Colors.white,
+                child: FadeInImage.assetNetwork(
+                  placeholder: "assets/players_placeholder.png",
+                  image: NBALinks.getPlayerProfilePic(player.personId),
+                )),
+            Container(width: 10.0),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(player.firstName),
+                  Text(player.lastName)
+                ])
+          ]),
+          margin: EdgeInsets.only(right: 10.0))),
+      DataCell(Text(player.min)),
+      DataCell(Text(player.pts)),
+      DataCell(Text(player.totReb)),
+      DataCell(Text(player.ast)),
+      DataCell(Text(player.fgm)),
+      DataCell(Text(player.fga)),
+      DataCell(Text(player.fgp)),
+      DataCell(Text(player.ftm)),
+      DataCell(Text(player.fta)),
+      DataCell(Text(player.ftp)),
+      DataCell(Text(player.tpm)),
+      DataCell(Text(player.tpa)),
+      DataCell(Text(player.tpp)),
+      DataCell(Text(player.offReb)),
+      DataCell(Text(player.defReb)),
+      DataCell(Text(player.stl)),
+      DataCell(Text(player.blk)),
+      DataCell(Text(player.to)),
+      DataCell(Text(player.plusMinus)),
+      DataCell(Text(player.pf))
     ];
   }
 

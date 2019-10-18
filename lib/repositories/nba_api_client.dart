@@ -18,9 +18,9 @@ class NBAApiClient {
 
   Future<List<Game>> fetchGameList({String date}) async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
-    final String gameListURL = (date == null) 
-      ? '$baseURL${nbaLinks.todayScoreboard}'
-      : '$baseURL${nbaLinks.scoreboard(date)}';
+    date = (date == null) ? nbaLinks.date : date;
+    final String gameListURL = '$baseURL${nbaLinks.scoreboard(date)}';
+
     //Local Develop URL
     //final String gameListURL = 'http://192.168.1.41:8000/scoreboard.json';
     final gameListResponse = await this.httpClient.get(gameListURL);
