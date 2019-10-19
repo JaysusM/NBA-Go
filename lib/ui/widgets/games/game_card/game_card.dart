@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nba_go/blocs/game_stats.dart';
+import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/ui/screens/screens.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
 

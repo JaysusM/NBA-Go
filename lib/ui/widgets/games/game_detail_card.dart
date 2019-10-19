@@ -37,31 +37,60 @@ class GameDetailCardState extends State<GameDetailCard> {
             children: <Widget>[
               _buttonSetTeamPlayers(
                   widget.gameDetail.awayTricode,
+                  widget.gameDetail.awayScore,
                   widget.gameDetail.awayPlayers,
                   false,
                   !this.homePlayersSelected),
               _buttonSetTeamPlayers(widget.gameDetail.homeTricode,
+                  widget.gameDetail.homeScore,
                   widget.gameDetail.homePlayers, true, this.homePlayersSelected)
             ],
           ),
           Expanded(
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
+              child: Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              width: 0.5,
+                              color: Theme.of(context).primaryColor))),
                   child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                          columnSpacing: 10.0,
-                          rows: this
-                              .players
-                              .map((player) =>
-                                  DataRow(cells: _getDataCells(player)))
-                              .toList(),
-                          columns: _getDataColumns()))))
+                      scrollDirection: Axis.vertical,
+                      child: Row(children: <Widget>[
+                        Container(
+                          child: DataTable(
+                            horizontalMargin: 10.0,
+                            rows: this
+                                .players
+                                .map((player) => DataRow(cells: <DataCell>[
+                                      _getPlayerNameCell(player)
+                                    ]))
+                                .toList(),
+                            columns: <DataColumn>[_getPlayerColumn()],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  right: BorderSide(
+                                      width: 0.5,
+                                      color: Theme.of(context).primaryColor))),
+                        ),
+                        Expanded(
+                            child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                    columnSpacing: 10.0,
+                                    horizontalMargin: 15.0,
+                                    rows: this
+                                        .players
+                                        .map((player) => DataRow(
+                                            cells: _getDataCells(player)))
+                                        .toList(),
+                                    columns: _getDataColumns())))
+                      ]))))
         ]));
   }
 
   Widget _buttonSetTeamPlayers(
-      String tricode, List<GamePlayerStats> players, bool isHome,
+      String tricode, String score, List<GamePlayerStats> players, bool isHome,
       [bool selected = false]) {
     TextStyle textStyle = Theme.of(context).textTheme.body1;
     textStyle = (selected)
@@ -69,9 +98,22 @@ class GameDetailCardState extends State<GameDetailCard> {
         : textStyle;
 
     return InkWell(
-      child: Container(
-        child: Text(tricode, style: textStyle),
-        padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
+      child: Row(
+        children: <Widget>[
+          Image.asset(
+            "assets/logos/${tricode.toUpperCase()}.png",
+            width: 20.0,
+            height: 20.0,
+          ),
+          Container(
+            child: Text(tricode, style: textStyle),
+            padding: EdgeInsets.fromLTRB(15.0, 15.0, 10.0, 15.0),
+          ),
+          Container(
+            child: Text(score, style: textStyle),
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
+          )
+        ],
       ),
       onTap: () {
         this.setState(() {
@@ -84,28 +126,13 @@ class GameDetailCardState extends State<GameDetailCard> {
 
   List<DataCell> _getDataCells(GamePlayerStats player) {
     return <DataCell>[
-      DataCell(Container(
-          child: Row(children: <Widget>[
-            CircleAvatar(
-                backgroundColor: Colors.white,
-                child: FadeInImage.assetNetwork(
-                  placeholder: "assets/players_placeholder.png",
-                  image: NBALinks.getPlayerProfilePic(player.personId),
-                )),
-            Container(width: 10.0),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(player.firstName),
-                  Text(player.lastName)
-                ])
-          ]),
-          margin: EdgeInsets.only(right: 10.0))),
+      DataCell(Text(player.pos)),
       DataCell(Text(player.min)),
       DataCell(Text(player.pts)),
       DataCell(Text(player.totReb)),
       DataCell(Text(player.ast)),
+      DataCell(Text(player.stl)),
+      DataCell(Text(player.blk)),
       DataCell(Text(player.fgm)),
       DataCell(Text(player.fga)),
       DataCell(Text(player.fgp)),
@@ -117,8 +144,6 @@ class GameDetailCardState extends State<GameDetailCard> {
       DataCell(Text(player.tpp)),
       DataCell(Text(player.offReb)),
       DataCell(Text(player.defReb)),
-      DataCell(Text(player.stl)),
-      DataCell(Text(player.blk)),
       DataCell(Text(player.to)),
       DataCell(Text(player.plusMinus)),
       DataCell(Text(player.pf))
@@ -127,11 +152,13 @@ class GameDetailCardState extends State<GameDetailCard> {
 
   List<DataColumn> _getDataColumns() {
     return <DataColumn>[
-      DataColumn(label: const Text('PLAYER')),
+      DataColumn(label: const Text('POS')),
       DataColumn(label: const Text('MIN')),
       DataColumn(label: const Text('PTS')),
       DataColumn(label: const Text('REB')),
       DataColumn(label: const Text('AST')),
+      DataColumn(label: const Text('STL')),
+      DataColumn(label: const Text('BLK')),
       DataColumn(label: const Text('FGM')),
       DataColumn(label: const Text('FGA')),
       DataColumn(label: const Text('FG%')),
@@ -143,11 +170,41 @@ class GameDetailCardState extends State<GameDetailCard> {
       DataColumn(label: const Text('3P%')),
       DataColumn(label: const Text('OREB')),
       DataColumn(label: const Text('DREB')),
-      DataColumn(label: const Text('STL')),
-      DataColumn(label: const Text('BLK')),
       DataColumn(label: const Text('TO')),
       DataColumn(label: const Text('+/-')),
       DataColumn(label: const Text('PF')),
     ];
+  }
+
+  DataCell _getPlayerNameCell(GamePlayerStats player) {
+    return DataCell(Container(
+        child: Row(children: <Widget>[
+          (player.isOnCourt)
+              ? Container(
+                  width: 4.0,
+                  height: 4.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Colors.red),
+                )
+              : Container(),
+          Container(width: 5.0),
+          CircleAvatar(
+              backgroundColor: Colors.white,
+              child: FadeInImage.assetNetwork(
+                placeholder: "assets/players_placeholder.png",
+                image: NBALinks.getPlayerProfilePic(player.personId),
+              )),
+          Container(width: 10.0),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[Text(player.firstName), Text(player.lastName)])
+        ]),
+        margin: EdgeInsets.only(right: 10.0)));
+  }
+
+  DataColumn _getPlayerColumn() {
+    return DataColumn(label: const Text('PLAYER'));
   }
 }

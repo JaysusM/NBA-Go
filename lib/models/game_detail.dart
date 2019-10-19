@@ -1,5 +1,5 @@
 class GameDetail {
-  String _gameId, _homeTeamId, _awayTeamId, _homeTricode, _awayTricode;
+  String _gameId, _homeTeamId, _awayTeamId, _homeTricode, _awayTricode, _homeScore, _awayScore;
   List<String> _homeTeamLinescore, _awayTeamLinescore;
   List<GamePlayerStats> _homePlayers, _awayPlayers;
 
@@ -17,6 +17,9 @@ class GameDetail {
     this._homeTricode = decodedJSON['basicGameData']['hTeam']['triCode'];
     this._awayTricode = decodedJSON['basicGameData']['vTeam']['triCode'];
 
+    this._homeScore = decodedJSON['basicGameData']['hTeam']['score'];
+    this._awayScore = decodedJSON['basicGameData']['vTeam']['score'];
+
     this._homePlayers = new List<GamePlayerStats>();
     this._awayPlayers = new List<GamePlayerStats>();
     List<dynamic> activePlayers = decodedJSON['stats']['activePlayers'];
@@ -31,6 +34,8 @@ class GameDetail {
   String get gameId => _gameId;
   String get homeTricode => _homeTricode;
   String get awayTricode => _awayTricode;
+  String get homeScore => _homeScore;
+  String get awayScore => _awayScore;
   List<GamePlayerStats> get homePlayers => _homePlayers;
   List<GamePlayerStats> get awayPlayers => _awayPlayers;
   List<String> get homeTeamLinescore => _homeTeamLinescore;
@@ -38,11 +43,12 @@ class GameDetail {
 }
 
 class GamePlayerStats {
-  String _personId, _jersey, _firstName, _lastName, _min, _pts, _fgm, _fga, _fgp,
+  String _personId, _pos, _jersey, _firstName, _lastName, _min, _pts, _fgm, _fga, _fgp,
   _ftm, _fta, _ftp, _tpm, _tpa, _tpp, _offReb, _defReb, _totReb, _ast, _pf, _stl, _to, _blk, _plusMinus;
   bool _isOnCourt;
 
   GamePlayerStats.fromJSON(Map<String, dynamic> decodedJSON) {
+    this._pos = decodedJSON['pos'];
     this._personId = decodedJSON['personId'];
     this._jersey = decodedJSON['jersey'];
     this._firstName = decodedJSON['firstName'];
@@ -70,6 +76,7 @@ class GamePlayerStats {
     this._isOnCourt = decodedJSON['isOnCourt'];
   }
 
+  String get pos => _pos;
   String get personId => _personId;
   String get pts => _pts;
   String get jersey => _jersey;

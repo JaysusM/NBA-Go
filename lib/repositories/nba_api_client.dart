@@ -21,8 +21,6 @@ class NBAApiClient {
     date = (date == null) ? nbaLinks.date : date;
     final String gameListURL = '$baseURL${nbaLinks.scoreboard(date)}';
 
-    //Local Develop URL
-    //final String gameListURL = 'http://192.168.1.41:8000/scoreboard.json';
     final gameListResponse = await this.httpClient.get(gameListURL);
     if (gameListResponse.statusCode != 200) {
       print('Received response status: ${gameListResponse.statusCode}, we returned empty game list');
@@ -63,12 +61,12 @@ class NBAApiClient {
 
   Future<GameDetail> fetchGameDetail(String date, String gameId) async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
-    final String playersURL = '$baseURL${nbaLinks.gameStats(date, gameId)}';
-    final playerListReponse = await this.httpClient.get(playersURL);
-    if(playerListReponse.statusCode != 200)
+    final String gameDetailURL = '$baseURL${nbaLinks.gameStats(date, gameId)}';
+    final gameDetailResponse = await this.httpClient.get(gameDetailURL);
+    if(gameDetailResponse.statusCode != 200)
       throw Exception('Error getting game stats');
 
-    final Map<String, dynamic> gameStatsJSON = jsonDecode(playerListReponse.body);
+    final Map<String, dynamic> gameStatsJSON = jsonDecode(gameDetailResponse.body);
     GameDetail gameDetail = GameDetail.fromJSON(gameStatsJSON);
     return gameDetail;
   }
