@@ -50,19 +50,7 @@ class GameCard extends StatelessWidget {
         .push(new MaterialPageRoute(builder: (BuildContext context) {
       String gameDate = this.game.gameDate;
       String gameId = this.game.gameId;
-      BlocProvider.of<GameStatsBloc>(parentContext)
-          .dispatch(FetchGameStats(gameDate: gameDate, gameId: gameId));
-      return BlocBuilder(
-        bloc: BlocProvider.of<GameStatsBloc>(parentContext),
-        builder: (BuildContext context, GameStatsState state) {
-          if (state is GameStatsLoading)
-            return LoadingWidget();
-          else if (state is GameStatsLoaded)
-            return GameDetailScreen(state.gameStats);
-          else if (state is GameStatsError) return ErrorWidget(state.error);
-          return ErrorWidget("ERROR. It was not possible to load game stats.");
-        },
-      );
+      return GameDetailScreen(gameDate, gameId);
     }));
   }
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:nba_go/models/game_detail.dart';
 import 'package:nba_go/ui/widgets/games/game_detail_card.dart';
 
 class GameDetailScreen extends StatelessWidget {
-  final GameDetail gameDetail;
+  final String gameDate, gameId;
 
-  GameDetailScreen(this.gameDetail) : assert(gameDetail != null);
+  GameDetailScreen(this.gameDate, this.gameId)
+      : assert(gameDate != null),
+        assert(gameId != null);
 
   @override
   Widget build(BuildContext context) {
-    return GameDetailCard(gameDetail);
+    return GameDetailCard(gameDate, gameId);
   }
 }

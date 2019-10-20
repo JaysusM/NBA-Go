@@ -16,10 +16,6 @@ class FetchGameStats extends GameStatsEvent {
       assert(gameId != null);
 }
 
-class RefreshGameStats extends GameStatsEvent {
-  RefreshGameStats();
-}
-
 abstract class GameStatsState extends Equatable {
   GameStatsState([List props = const []]) : super(props);
 }
@@ -57,14 +53,6 @@ class GameStatsBloc extends Bloc<GameStatsEvent, GameStatsState> {
         GameDetail gameDetail = await this.gameStatsRepository.getGameDetail(event.gameDate, event.gameId);
         this._lastGameId = event.gameId;
         this._lastGameDate = event.gameDate;
-        yield GameStatsLoaded(gameStats: gameDetail);
-      } catch (error) {
-        yield GameStatsError(error: error.toString());
-      }
-    } else if (event is RefreshGameStats) {
-      yield GameStatsLoading();
-      try {
-        GameDetail gameDetail = await this.gameStatsRepository.getGameDetail(this._lastGameDate, this._lastGameId);
         yield GameStatsLoaded(gameStats: gameDetail);
       } catch (error) {
         yield GameStatsError(error: error.toString());

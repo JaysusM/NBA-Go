@@ -1,34 +1,74 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/models/game_detail.dart';
 import 'package:nba_go/models/links.dart';
+import 'package:nba_go/ui/widgets/utils/loading_widget.dart';
 
 class GameDetailCard extends StatefulWidget {
-  final GameDetail gameDetail;
+  final String gameDate, gameId;
 
-  GameDetailCard(this.gameDetail) : assert(gameDetail != null);
+  GameDetailCard(this.gameDate, this.gameId)
+      : assert(gameDate != null),
+        assert(gameId != null);
 
   @override
   State<StatefulWidget> createState() => GameDetailCardState();
 }
 
 class GameDetailCardState extends State<GameDetailCard> {
-  List<GamePlayerStats> players;
-  bool homePlayersSelected;
+  List<GamePlayerStats> _players;
+  bool _homePlayersSelected;
+  Completer _refreshCompleter;
+  GameDetail _gameDetail;
 
   @override
   void initState() {
-    this.players = widget.gameDetail.awayPlayers;
-    this.homePlayersSelected = false;
+    this._refreshCompleter = Completer<void>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    GameStatsBloc gameStatsBloc = BlocProvider.of<GameStatsBloc>(context);
+    gameStatsBloc.dispatch(FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
+    return BlocBuilder(
+      bloc: gameStatsBloc,
+      builder: (BuildContext context, GameStatsState state) {
+        if (state is GameStatsLoaded) {
+          this._gameDetail = state.gameStats;
+          this._players = this._gameDetail.awayPlayers;
+          this._homePlayersSelected = false;
+          this._refreshCompleter?.complete();
+          this._refreshCompleter = Completer<void>();
+          return RefreshIndicator(
+            child: _gameStatsContent(),
+            onRefresh: () {
+              gameStatsBloc.dispatch(FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
+              return this._refreshCompleter.future;
+            },
+          );
+        } else if (state is GameStatsEmpty || state is GameStatsError) {
+          return ErrorWidget("ERROR. Couldn't get game stats data");
+        } else if (state is GameStatsLoading) {
+          return Stack(
+            children: <Widget>[
+              (this._gameDetail.gameId == widget.gameId) ? this._gameStatsContent() : Container(),
+              LoadingWidget() 
+            ],
+          );
+        }
+        return ErrorWidget("ERROR. Unknown game stats state");
+      },
+    );
+  }
+
+  Widget _gameStatsContent() {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
-              "${widget.gameDetail.awayTricode} @ ${widget.gameDetail.homeTricode}"),
+          title: Text("${_gameDetail.awayTricode} @ ${_gameDetail.homeTricode}"),
         ),
         body: Column(children: <Widget>[
           Row(
@@ -36,14 +76,17 @@ class GameDetailCardState extends State<GameDetailCard> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buttonSetTeamPlayers(
-                  widget.gameDetail.awayTricode,
-                  widget.gameDetail.awayScore,
-                  widget.gameDetail.awayPlayers,
+                  _gameDetail.awayTricode,
+                  _gameDetail.awayScore,
+                  _gameDetail.awayPlayers,
                   false,
-                  !this.homePlayersSelected),
-              _buttonSetTeamPlayers(widget.gameDetail.homeTricode,
-                  widget.gameDetail.homeScore,
-                  widget.gameDetail.homePlayers, true, this.homePlayersSelected)
+                  !this._homePlayersSelected),
+              _buttonSetTeamPlayers(
+                  _gameDetail.homeTricode,
+                  _gameDetail.homeScore,
+                  _gameDetail.homePlayers,
+                  true,
+                  this._homePlayersSelected)
             ],
           ),
           Expanded(
@@ -60,7 +103,7 @@ class GameDetailCardState extends State<GameDetailCard> {
                           child: DataTable(
                             horizontalMargin: 10.0,
                             rows: this
-                                .players
+                                ._players
                                 .map((player) => DataRow(cells: <DataCell>[
                                       _getPlayerNameCell(player)
                                     ]))
@@ -80,7 +123,7 @@ class GameDetailCardState extends State<GameDetailCard> {
                                     columnSpacing: 10.0,
                                     horizontalMargin: 15.0,
                                     rows: this
-                                        .players
+                                        ._players
                                         .map((player) => DataRow(
                                             cells: _getDataCells(player)))
                                         .toList(),
@@ -117,8 +160,8 @@ class GameDetailCardState extends State<GameDetailCard> {
       ),
       onTap: () {
         this.setState(() {
-          this.players = players;
-          this.homePlayersSelected = isHome;
+          this._players = players;
+          this._homePlayersSelected = isHome;
         });
       },
     );
