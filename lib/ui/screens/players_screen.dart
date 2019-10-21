@@ -59,9 +59,6 @@ class PlayersScreenState extends State<PlayersScreen> {
 
   void _toggleAnimatedWidget() {
     this.setState(() {
-      if (this._isSearch) {
-        this._playerListBloc.dispatch(FilterPlayerListByValue(''));
-      }
       this._isSearch = !this._isSearch;
       this._animatedWidget = (_isSearch) ? _searchBar() : _teamSelector;
       this._buttonIconData = (_isSearch) ? LineIcons.reply : Icons.search;
