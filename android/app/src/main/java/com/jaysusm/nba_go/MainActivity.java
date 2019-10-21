@@ -1,4 +1,4 @@
-package com.example.nba_go;
+package com.jaysusm.nba_go;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

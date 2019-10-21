@@ -4,23 +4,31 @@ import 'package:meta/meta.dart';
 class PlayerDetail {
   _SeasonStats _currentSeasonStats;
   Player _player;
+  List<_SeasonStats> _allSeasonStats;
 
   PlayerDetail.fromJSON(Map<String, dynamic> decodedJSON, this._player)
     : assert(_player != null) {
+    _allSeasonStats = new List<_SeasonStats>();
     Map<String, dynamic> currentSeasonStatsJSON = decodedJSON['league']['standard']['stats']['latest'];
     this._currentSeasonStats = _SeasonStats.fromJSON(currentSeasonStatsJSON);
+
+    List<dynamic> allSeasons = decodedJSON['league']['standard']['stats']['regularSeason']['season'];
+    this._allSeasonStats.add(this._currentSeasonStats);
+    allSeasons.forEach((dynamic season) => this._allSeasonStats.add(_SeasonStats.fromJSON(season, false)));
   }
 
   Player get player => this._player;
   _SeasonStats get currentSeasonStats => this._currentSeasonStats;
+  List<_SeasonStats> get allSeasonStats => this._allSeasonStats;
 }
 
 class _SeasonStats {
   int _seasonYear;
   double _ppg, _rpg, _apg, _mpg, _topg, _spg, _bpg,
     _tpp, _ftp, _fgp, _plusMinus, _min;
+  bool _currentSeason;
 
-  _SeasonStats.fromJSON(Map<String, dynamic> decodedJSON) {
+  _SeasonStats.fromJSON(Map<String, dynamic> decodedJSON, [this._currentSeason = true]) {
     this._seasonYear = decodedJSON['seasonYear'];
     this._ppg = _parseStat(statName: 'ppg', statMap: decodedJSON);
     this._apg = _parseStat(statName: 'apg', statMap: decodedJSON);
@@ -51,7 +59,7 @@ class _SeasonStats {
   double get min => this._min;
 
   double _parseStat({@required String statName, @required Map<String, dynamic> statMap}) {
-    String statValue = statMap[statName];
+    String statValue = (this._currentSeason) ? statMap[statName] : statMap['total'][statName];
     List<String> noValues = ['0', '-1', ''];
     return (noValues.contains(statValue)) ? 0.0 : double.parse(statValue);
   }

@@ -163,6 +163,7 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                                                     team.teamId)
                                                 .shortName +
                                             "\t\t",
+                                        overflow: TextOverflow.ellipsis,
                                         style: textStyle)),
                                 Expanded(
                                   child: Text(
