@@ -23,33 +23,43 @@ class GameDetailCardState extends State<GameDetailCard> {
   bool _homePlayersSelected;
   Timer _refreshTimer;
   GameDetail _gameDetail;
-  GameStatsBloc gameStatsBloc;
+  static const _RELOAD_DATA_IN_SECONDS = 2;
+  bool _refresh;
 
   @override
   void initState() {
-    if (this._gameDetail.status - 1 != GameStatus.FINISHED.index) {
-      this._refreshTimer = Timer.periodic(Duration(seconds: 2), (_) {
-        if (gameStatsBloc != null) {
-          this.setState(() {
-            gameStatsBloc.dispatch(FetchGameStats(
-                gameDate: widget.gameDate, gameId: widget.gameId));
-          });
-        }
+    this._refresh = true;
+    this._refreshTimer =
+        Timer.periodic(Duration(seconds: _RELOAD_DATA_IN_SECONDS), (_) {
+      this.setState(() {
+        this._refresh = true;
       });
-    }
+    });
     super.initState();
   }
 
   @override
+  void dispose() {
+    this._refreshTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    this.gameStatsBloc = BlocProvider.of<GameStatsBloc>(context);
-    gameStatsBloc.dispatch(
-        FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
+    GameStatsBloc gameStatsBloc = BlocProvider.of<GameStatsBloc>(context);
+    if (this._refresh) {
+      this._refresh = false;
+      gameStatsBloc.dispatch(
+          FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
+    }
     return BlocBuilder(
       bloc: gameStatsBloc,
       builder: (BuildContext context, GameStatsState state) {
         if (state is GameStatsLoaded) {
           this._gameDetail = state.gameStats;
+          if(this._gameDetail.status+1 == GameStatus.FINISHED.index) {
+            this._refreshTimer.cancel();
+          }
           return _gameStatsContent();
         } else if (state is GameStatsEmpty || state is GameStatsError) {
           return ErrorWidget("ERROR. Couldn't get game stats data");

@@ -12,7 +12,7 @@ class GameDetail {
     this._awayTeamLinescore = new List<String>();
     decodedJSON['basicGameData']['vTeam']['linescore'].forEach((lineScore) => this._awayTeamLinescore.add(lineScore['score']));
 
-    this._status = int.parse(decodedJSON['basicGameData']['statusNum']);
+    this._status = decodedJSON['basicGameData']['statusNum'];
 
     this._homeTeamId = decodedJSON['basicGameData']['hTeam']['teamId'];
     this._awayTeamId = decodedJSON['basicGameData']['vTeam']['teamId'];
