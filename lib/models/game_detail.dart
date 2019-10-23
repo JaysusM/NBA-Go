@@ -1,5 +1,6 @@
 class GameDetail {
   String _gameId, _homeTeamId, _awayTeamId, _homeTricode, _awayTricode, _homeScore, _awayScore;
+  int _status;
   List<String> _homeTeamLinescore, _awayTeamLinescore;
   List<GamePlayerStats> _homePlayers, _awayPlayers;
 
@@ -10,6 +11,8 @@ class GameDetail {
     decodedJSON['basicGameData']['hTeam']['linescore'].forEach((lineScore) => this._homeTeamLinescore.add(lineScore['score']));
     this._awayTeamLinescore = new List<String>();
     decodedJSON['basicGameData']['vTeam']['linescore'].forEach((lineScore) => this._awayTeamLinescore.add(lineScore['score']));
+
+    this._status = int.parse(decodedJSON['basicGameData']['statusNum']);
 
     this._homeTeamId = decodedJSON['basicGameData']['hTeam']['teamId'];
     this._awayTeamId = decodedJSON['basicGameData']['vTeam']['teamId'];
@@ -31,6 +34,7 @@ class GameDetail {
     }
   }
 
+  int get status => _status;
   String get gameId => _gameId;
   String get homeTricode => _homeTricode;
   String get awayTricode => _awayTricode;

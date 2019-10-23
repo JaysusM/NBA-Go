@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nba_go/blocs/blocs.dart';
 import 'package:nba_go/models/game_detail.dart';
 import 'package:nba_go/models/links.dart';
+import 'package:nba_go/models/models.dart';
 import 'package:nba_go/ui/widgets/utils/loading_widget.dart';
 
 class GameDetailCard extends StatefulWidget {
@@ -20,18 +21,28 @@ class GameDetailCard extends StatefulWidget {
 class GameDetailCardState extends State<GameDetailCard> {
   List<GamePlayerStats> _players;
   bool _homePlayersSelected;
-  Completer _refreshCompleter;
+  Timer _refreshTimer;
   GameDetail _gameDetail;
+  GameStatsBloc gameStatsBloc;
 
   @override
   void initState() {
-    this._refreshCompleter = Completer<void>();
+    if (this._gameDetail.status - 1 != GameStatus.FINISHED.index) {
+      this._refreshTimer = Timer.periodic(Duration(seconds: 2), (_) {
+        if (gameStatsBloc != null) {
+          this.setState(() {
+            gameStatsBloc.dispatch(FetchGameStats(
+                gameDate: widget.gameDate, gameId: widget.gameId));
+          });
+        }
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    GameStatsBloc gameStatsBloc = BlocProvider.of<GameStatsBloc>(context);
+    this.gameStatsBloc = BlocProvider.of<GameStatsBloc>(context);
     gameStatsBloc.dispatch(
         FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
     return BlocBuilder(
@@ -39,27 +50,13 @@ class GameDetailCardState extends State<GameDetailCard> {
       builder: (BuildContext context, GameStatsState state) {
         if (state is GameStatsLoaded) {
           this._gameDetail = state.gameStats;
-          this._refreshCompleter?.complete();
-          this._refreshCompleter = Completer<void>();
-          return RefreshIndicator(
-            child: _gameStatsContent(),
-            onRefresh: () {
-              gameStatsBloc.dispatch(FetchGameStats(
-                  gameDate: widget.gameDate, gameId: widget.gameId));
-              return this._refreshCompleter.future;
-            },
-          );
+          return _gameStatsContent();
         } else if (state is GameStatsEmpty || state is GameStatsError) {
           return ErrorWidget("ERROR. Couldn't get game stats data");
         } else if (state is GameStatsLoading) {
-          return Stack(
-            children: <Widget>[
-              (this._gameDetail?.gameId == widget.gameId)
-                  ? this._gameStatsContent()
-                  : Container(),
-              LoadingWidget()
-            ],
-          );
+          return (this._gameDetail?.gameId == widget.gameId)
+              ? this._gameStatsContent()
+              : LoadingWidget();
         }
         return ErrorWidget("ERROR. Unknown game stats state");
       },
@@ -67,8 +64,10 @@ class GameDetailCardState extends State<GameDetailCard> {
   }
 
   Widget _gameStatsContent() {
-    this._players = (this._players == null) ? this._gameDetail.awayPlayers : this._players;
-    this._homePlayersSelected = (this._homePlayersSelected == null) ? false : this._homePlayersSelected;
+    this._players =
+        (this._players == null) ? this._gameDetail.awayPlayers : this._players;
+    this._homePlayersSelected =
+        (this._homePlayersSelected == null) ? false : this._homePlayersSelected;
 
     return Scaffold(
         appBar: AppBar(
@@ -226,35 +225,31 @@ class GameDetailCardState extends State<GameDetailCard> {
   }
 
   DataCell _getPlayerNameCell(GamePlayerStats player) {
-    return DataCell(
-        Container(
-            child: Row(children: <Widget>[
-              (player.isOnCourt)
-                  ? Container(
-                      width: 4.0,
-                      height: 4.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
-                          color: Colors.red),
-                    )
-                  : Container(),
-              Container(width: 5.0),
-              CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: FadeInImage.assetNetwork(
-                    placeholder: "assets/players_placeholder.png",
-                    image: NBALinks.getPlayerProfilePic(player.personId),
-                  )),
-              Container(width: 10.0),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(player.firstName),
-                    Text(player.lastName)
-                  ])
-            ]),
-            margin: EdgeInsets.only(right: 10.0)));
+    return DataCell(Container(
+        child: Row(children: <Widget>[
+          (player.isOnCourt)
+              ? Container(
+                  width: 4.0,
+                  height: 4.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Colors.red),
+                )
+              : Container(),
+          Container(width: 5.0),
+          CircleAvatar(
+              backgroundColor: Colors.white,
+              child: FadeInImage.assetNetwork(
+                placeholder: "assets/players_placeholder.png",
+                image: NBALinks.getPlayerProfilePic(player.personId),
+              )),
+          Container(width: 10.0),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[Text(player.firstName), Text(player.lastName)])
+        ]),
+        margin: EdgeInsets.only(right: 10.0)));
   }
 
   DataColumn _getPlayerColumn() {
