@@ -10,11 +10,13 @@ class PlayerDetail {
     : assert(_player != null) {
     _allSeasonStats = new List<_SeasonStats>();
     Map<String, dynamic> currentSeasonStatsJSON = decodedJSON['league']['standard']['stats']['latest'];
-    this._currentSeasonStats = _SeasonStats.fromJSON(currentSeasonStatsJSON);
+    this._currentSeasonStats = _SeasonStats.fromJSON(currentSeasonStatsJSON, teamId: decodedJSON['league']['standard']['teamId']);
 
     List<dynamic> allSeasons = decodedJSON['league']['standard']['stats']['regularSeason']['season'];
     this._allSeasonStats.add(this._currentSeasonStats);
-    allSeasons.forEach((dynamic season) => this._allSeasonStats.add(_SeasonStats.fromJSON(season, false)));
+    for(dynamic season in allSeasons) {
+      season['teams'].forEach((dynamic teamSeason) => this._allSeasonStats.add(_SeasonStats.fromJSON(teamSeason, seasonYear: season['seasonYear'])));
+    }
   }
 
   Player get player => this._player;
@@ -24,12 +26,13 @@ class PlayerDetail {
 
 class _SeasonStats {
   int _seasonYear;
+  String _teamId;
   double _ppg, _rpg, _apg, _mpg, _topg, _spg, _bpg,
     _tpp, _ftp, _fgp, _plusMinus, _min;
-  bool _currentSeason;
 
-  _SeasonStats.fromJSON(Map<String, dynamic> decodedJSON, [this._currentSeason = true]) {
-    this._seasonYear = decodedJSON['seasonYear'];
+  _SeasonStats.fromJSON(Map<String, dynamic> decodedJSON, {int seasonYear, String teamId}) {
+    this._seasonYear = (seasonYear != null) ? seasonYear : decodedJSON['seasonYear'];
+    this._teamId = (teamId != null) ? teamId : decodedJSON['teamId'];
     this._ppg = _parseStat(statName: 'ppg', statMap: decodedJSON);
     this._apg = _parseStat(statName: 'apg', statMap: decodedJSON);
     this._rpg = _parseStat(statName: 'rpg', statMap: decodedJSON);
@@ -45,6 +48,7 @@ class _SeasonStats {
   }
 
   int get seasonYear => this._seasonYear;
+  String get teamId => this._teamId;
   double get ppg => this._ppg;
   double get rpg => this._rpg;
   double get apg => this._apg;
@@ -59,7 +63,7 @@ class _SeasonStats {
   double get min => this._min;
 
   double _parseStat({@required String statName, @required Map<String, dynamic> statMap}) {
-    String statValue = (this._currentSeason) ? statMap[statName] : statMap['total'][statName];
+    String statValue = statMap[statName];
     List<String> noValues = ['0', '-1', ''];
     return (noValues.contains(statValue)) ? 0.0 : double.parse(statValue);
   }
