@@ -13,7 +13,6 @@ class PlayerDetail {
     this._currentSeasonStats = _SeasonStats.fromJSON(currentSeasonStatsJSON, teamId: decodedJSON['league']['standard']['teamId']);
 
     List<dynamic> allSeasons = decodedJSON['league']['standard']['stats']['regularSeason']['season'];
-    this._allSeasonStats.add(this._currentSeasonStats);
     for(dynamic season in allSeasons) {
       season['teams'].forEach((dynamic teamSeason) => this._allSeasonStats.add(_SeasonStats.fromJSON(teamSeason, seasonYear: season['seasonYear'])));
     }
