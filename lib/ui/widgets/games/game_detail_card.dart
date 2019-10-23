@@ -32,20 +32,20 @@ class GameDetailCardState extends State<GameDetailCard> {
   @override
   Widget build(BuildContext context) {
     GameStatsBloc gameStatsBloc = BlocProvider.of<GameStatsBloc>(context);
-    gameStatsBloc.dispatch(FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
+    gameStatsBloc.dispatch(
+        FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
     return BlocBuilder(
       bloc: gameStatsBloc,
       builder: (BuildContext context, GameStatsState state) {
         if (state is GameStatsLoaded) {
           this._gameDetail = state.gameStats;
-          this._players = this._gameDetail.awayPlayers;
-          this._homePlayersSelected = false;
           this._refreshCompleter?.complete();
           this._refreshCompleter = Completer<void>();
           return RefreshIndicator(
             child: _gameStatsContent(),
             onRefresh: () {
-              gameStatsBloc.dispatch(FetchGameStats(gameDate: widget.gameDate, gameId: widget.gameId));
+              gameStatsBloc.dispatch(FetchGameStats(
+                  gameDate: widget.gameDate, gameId: widget.gameId));
               return this._refreshCompleter.future;
             },
           );
@@ -54,8 +54,10 @@ class GameDetailCardState extends State<GameDetailCard> {
         } else if (state is GameStatsLoading) {
           return Stack(
             children: <Widget>[
-              (this._gameDetail.gameId == widget.gameId) ? this._gameStatsContent() : Container(),
-              LoadingWidget() 
+              (this._gameDetail?.gameId == widget.gameId)
+                  ? this._gameStatsContent()
+                  : Container(),
+              LoadingWidget()
             ],
           );
         }
@@ -65,10 +67,14 @@ class GameDetailCardState extends State<GameDetailCard> {
   }
 
   Widget _gameStatsContent() {
+    this._players = (this._players == null) ? this._gameDetail.awayPlayers : this._players;
+    this._homePlayersSelected = (this._homePlayersSelected == null) ? false : this._homePlayersSelected;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("${_gameDetail.awayTricode} @ ${_gameDetail.homeTricode}"),
+          title:
+              Text("${_gameDetail.awayTricode} @ ${_gameDetail.homeTricode}"),
         ),
         body: Column(children: <Widget>[
           Row(
@@ -220,31 +226,35 @@ class GameDetailCardState extends State<GameDetailCard> {
   }
 
   DataCell _getPlayerNameCell(GamePlayerStats player) {
-    return DataCell(Container(
-        child: Row(children: <Widget>[
-          (player.isOnCourt)
-              ? Container(
-                  width: 4.0,
-                  height: 4.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25.0),
-                      color: Colors.red),
-                )
-              : Container(),
-          Container(width: 5.0),
-          CircleAvatar(
-              backgroundColor: Colors.white,
-              child: FadeInImage.assetNetwork(
-                placeholder: "assets/players_placeholder.png",
-                image: NBALinks.getPlayerProfilePic(player.personId),
-              )),
-          Container(width: 10.0),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[Text(player.firstName), Text(player.lastName)])
-        ]),
-        margin: EdgeInsets.only(right: 10.0)));
+    return DataCell(
+        Container(
+            child: Row(children: <Widget>[
+              (player.isOnCourt)
+                  ? Container(
+                      width: 4.0,
+                      height: 4.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.0),
+                          color: Colors.red),
+                    )
+                  : Container(),
+              Container(width: 5.0),
+              CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: FadeInImage.assetNetwork(
+                    placeholder: "assets/players_placeholder.png",
+                    image: NBALinks.getPlayerProfilePic(player.personId),
+                  )),
+              Container(width: 10.0),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(player.firstName),
+                    Text(player.lastName)
+                  ])
+            ]),
+            margin: EdgeInsets.only(right: 10.0)));
   }
 
   DataColumn _getPlayerColumn() {

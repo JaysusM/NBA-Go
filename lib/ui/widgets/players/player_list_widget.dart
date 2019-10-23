@@ -46,6 +46,8 @@ class _PlayerListViewState extends State<PlayerListView> {
   int _quantityPlayersShown;
   static const int NUMBER_OF_CARD_TO_LOAD = 20;
   bool _showTopButton;
+  static const int _BUTTON_KEY_VALUE = 1;
+  static const int _CONTAINER_KEY_VALUE = 2;
 
   @override
   void initState() {
@@ -89,7 +91,7 @@ class _PlayerListViewState extends State<PlayerListView> {
             ? Container(
               child: FloatingActionButton(
                 elevation: 3.0,
-                key: ValueKey(1),
+                key: ValueKey(_BUTTON_KEY_VALUE),
                 backgroundColor: Theme.of(context).accentColor,
                 foregroundColor: Theme.of(context).primaryColor,
                 child: Icon(
@@ -105,7 +107,7 @@ class _PlayerListViewState extends State<PlayerListView> {
               ),
               padding: EdgeInsets.all(5.5),
               margin: EdgeInsets.all(0.0),
-            ) : Container(key: ValueKey(2)),
+            ) : Container(key: ValueKey(_CONTAINER_KEY_VALUE)),
             duration: Duration(milliseconds: 500)
           ),
           bottom: 20.0,
