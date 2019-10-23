@@ -55,7 +55,6 @@ class GameStatsBloc extends Bloc<GameStatsEvent, GameStatsState> {
         this._lastGameDate = event.gameDate;
         yield GameStatsLoaded(gameStats: gameDetail);
       } catch (error) {
-        print(error);
         yield GameStatsError(error: error.toString());
       }
     }

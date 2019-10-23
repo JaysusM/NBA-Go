@@ -131,18 +131,21 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                           // -3 Because we showed the three top teams before
                           itemCount: TEAMS_PER_CONFERENCE - 3,
                           itemBuilder: (BuildContext context, int index) {
+                            int rank = index + 4;
                             TextStyle textStyle = Theme.of(context)
                                 .textTheme
                                 .body1
                                 .copyWith(
                                     fontSize: 22.0,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: (rank <= 8) ? FontWeight.w300 : FontWeight.w200,
                                     color: Theme.of(context).primaryColor);
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Expanded(
-                                  child: Text("${index + 4}", style: textStyle.copyWith(fontWeight: FontWeight.w600)),
+                                  child: Text("$rank", style: textStyle.copyWith(fontWeight: FontWeight.w600)),
                                   flex: 2,
                                 ),
                                 Expanded(
