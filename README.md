@@ -10,13 +10,13 @@ Well, this is actually a v2.0 app, I rewrote the app from scratch ([v1 code avai
 The v1 was created with Flutter Alpha version and with learning purposes without structured code. The reason I rewrote the app to prove myself and check what I learnt, I tried to write clean code, use architectural patterns (BLoC) and use app theming.
 
 ## Screenshots
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/calendar.jpg)
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/calendar_1.jpg)
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/game_stats.jpg)
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/players.jpg)
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/player_search.jpg)
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/player_profile.jpg)
-![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/standings.jpg)
+| Calendar | Stats | Players |
+| - | - | - |
+| ![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/calendar.jpg) | ![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/game_stats.jpg) | ![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/players.jpg) |
+
+| Calendar | Standings | Players |
+| - | - | - |
+| ![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/calendar_1.jpg) | ![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/standings.jpg) | ![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/screenshots/player_profile.jpg) |
 
 ## Resources
 - [data.nba.net](http://data.nba.net): NBA API

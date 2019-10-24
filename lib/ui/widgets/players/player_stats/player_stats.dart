@@ -23,11 +23,11 @@ class PlayerStats extends StatelessWidget {
                 flex: 1),
             Expanded(
                 child: SingleStatWidget(
-                    name: 'APG', value: playerDetail.currentSeasonStats.apg),
+                    name: 'RPG', value: playerDetail.currentSeasonStats.rpg),
                 flex: 1),
             Expanded(
                 child: SingleStatWidget(
-                    name: 'RPG', value: playerDetail.currentSeasonStats.apg),
+                    name: 'APG', value: playerDetail.currentSeasonStats.apg),
                 flex: 1),
           ],
         ),

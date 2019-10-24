@@ -24,10 +24,14 @@ class GameDetailCardState extends State<GameDetailCard> {
   Timer _refreshTimer;
   GameDetail _gameDetail;
   static const _RELOAD_DATA_IN_SECONDS = 2;
+  static const _PLAYER_COLUMN_WIDTH = 150.0;
+  static const _PLAYER_NAME_WIDTH = 80.0;
   bool _refresh;
 
   @override
   void initState() {
+    this._homePlayersSelected = false;
+
     this._refresh = true;
     this._refreshTimer =
         Timer.periodic(Duration(seconds: _RELOAD_DATA_IN_SECONDS), (_) {
@@ -57,7 +61,12 @@ class GameDetailCardState extends State<GameDetailCard> {
       builder: (BuildContext context, GameStatsState state) {
         if (state is GameStatsLoaded) {
           this._gameDetail = state.gameStats;
-          if(this._gameDetail.status+1 == GameStatus.FINISHED.index) {
+          if (!this._homePlayersSelected) {
+            this._players = this._gameDetail.awayPlayers;
+          } else if (this._homePlayersSelected) {
+            this._players = this._gameDetail.homePlayers;
+          }
+          if (this._gameDetail.status + 1 == GameStatus.FINISHED.index) {
             this._refreshTimer.cancel();
           }
           return _gameStatsContent();
@@ -125,6 +134,7 @@ class GameDetailCardState extends State<GameDetailCard> {
                                 .toList(),
                             columns: <DataColumn>[_getPlayerColumn()],
                           ),
+                          width: _PLAYER_COLUMN_WIDTH,
                           decoration: BoxDecoration(
                               border: Border(
                                   right: BorderSide(
@@ -257,8 +267,15 @@ class GameDetailCardState extends State<GameDetailCard> {
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[Text(player.firstName), Text(player.lastName)])
+              children: <Widget>[
+                Text(player.firstName),
+                SizedBox(
+                    child:
+                        Text(player.lastName, overflow: TextOverflow.ellipsis),
+                    width: _PLAYER_NAME_WIDTH)
+              ])
         ]),
+        width: 150.0,
         margin: EdgeInsets.only(right: 10.0)));
   }
 

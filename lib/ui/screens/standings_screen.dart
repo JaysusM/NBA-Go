@@ -10,6 +10,8 @@ class StandingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     StandingListBloc standingListBloc =
         BlocProvider.of<StandingListBloc>(context);
+        
+    standingListBloc.dispatch(FetchStandingList());
 
     return BlocBuilder(
       bloc: standingListBloc,
