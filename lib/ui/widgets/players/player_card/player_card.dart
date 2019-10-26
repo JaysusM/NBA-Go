@@ -62,11 +62,9 @@ class PlayerCard extends StatelessWidget {
     );
   }
 
-  // TODO: Convert this method in a MaterialApp route with parameters
   void _showPlayerDetailPage(BuildContext parentContext) {
     Navigator.of(parentContext).push(CupertinoPageRoute(
       builder: (BuildContext context) {
-        // TODO: Research. Is it possible to get BLoC from inside context?
         PlayerDetailBloc playerDetailBloc = BlocProvider.of<PlayerDetailBloc>(parentContext);
         return PlayerDetailScreen(playerDetailBloc: playerDetailBloc, player: this.player);            
       }

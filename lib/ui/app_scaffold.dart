@@ -92,11 +92,9 @@ class AppScaffoldState extends State<AppScaffold> {
             ),
           );
         } else if (snapshot.hasError) {
-          print(snapshot.error);
           return Text('Error loading calendar data', style: TextStyle(color: Colors.red));
         } else
-        // TODO Add splash screen
-          return Container();
+          return Image.asset('assets/splash.png', fit: BoxFit.fill);
       }
     );
   }

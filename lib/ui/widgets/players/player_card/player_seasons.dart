@@ -5,13 +5,12 @@ import 'package:nba_go/models/models.dart';
 
 class PlayerSeasons extends StatelessWidget {
   final PlayerDetail playerDetail;
-  List<Team> teams;
 
   PlayerSeasons({@required this.playerDetail}) : assert(playerDetail != null);
 
   @override
   Widget build(BuildContext context) {
-    this.teams =
+    List<Team> teams =
         (BlocProvider.of<TeamListBloc>(context).currentState as TeamListLoaded)
             .teams;
     return Container(
@@ -23,7 +22,7 @@ class PlayerSeasons extends StatelessWidget {
                 horizontalMargin: 0.0,
                 columnSpacing: 10.0,
                 columns: _getDataColumns(),
-                rows: _getDataRows(),
+                rows: _getDataRows(teams),
               ))),
       margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
     );
@@ -44,12 +43,12 @@ class PlayerSeasons extends StatelessWidget {
     ];
   }
 
-  List<DataRow> _getDataRows() {
+  List<DataRow> _getDataRows(List<Team> teams) {
     return this
         .playerDetail
         .allSeasonStats
         .map((season) {
-          Team team = this.teams.firstWhere((team) => team.teamId == season.teamId);
+          Team team = teams.firstWhere((team) => team.teamId == season.teamId);
           return DataRow(cells: <DataCell>[
               DataCell(Text(season.seasonYear.toString())),
               DataCell(Text(team.tricode.toUpperCase())),

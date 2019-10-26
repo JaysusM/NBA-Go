@@ -35,6 +35,7 @@ class StandingListLoaded extends StandingListState {
 
 class StandingListBloc extends Bloc<StandingListEvent, StandingListState> {
   final StandingsRepository standingRepository;
+  List<TeamStanding> standings;
 
   StandingListBloc({@required this.standingRepository})
     : assert(standingRepository != null);
@@ -48,6 +49,7 @@ class StandingListBloc extends Bloc<StandingListEvent, StandingListState> {
       yield StandingListLoading();
       try {
         final List<TeamStanding> standings = await standingRepository.fetchConferenceStandings();
+        this.standings = standings;
         yield StandingListLoaded(standings: standings);
       } catch (error) {
         yield StandingListError(error: error.toString());

@@ -31,13 +31,13 @@ abstract class PlayerListState extends Equatable {
 class PlayerListEmpty extends PlayerListState {}
 class PlayerListLoading extends PlayerListState {}
 class PlayerListLoaded extends PlayerListState {
-  List<Player> players;
+  final List<Player> players;
 
   PlayerListLoaded({@required this.players})
     : assert(players != null);
 }
 class PlayerListError extends PlayerListState {
-  String error;
+  final String error;
 
   PlayerListError({@required this.error})
     : assert(error != null);

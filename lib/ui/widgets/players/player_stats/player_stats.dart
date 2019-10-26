@@ -4,7 +4,7 @@ import 'package:nba_go/ui/widgets/players/player_stats/single_stat_widget.dart';
 
 class PlayerStats extends StatelessWidget {
   final PlayerDetail playerDetail;
-  final double BORDER_WIDTH = 3.0;
+  static const double BORDER_WIDTH = 3.0;
 
   PlayerStats({@required this.playerDetail}) : assert(playerDetail != null);
 

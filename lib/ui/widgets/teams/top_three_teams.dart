@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nba_go/models/models.dart';
 
 class TopThreeTeamsStandings extends StatelessWidget {
-  Iterator<TeamStanding> teamIterator;
-  List<Team> teamList;
+  final Iterator<TeamStanding> teamIterator;
+  final List<Team> teamList;
 
   TopThreeTeamsStandings({@required this.teamIterator, @required this.teamList})
     : assert(teamIterator != null),
