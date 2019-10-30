@@ -28,7 +28,7 @@ class Game {
 
   Game.fromJSON(this.gameDate, Map<String, dynamic> data) : 
     this.gameId = data['gameId'],
-    this.clock = data['clock'],
+    this.clock = (data['clock'].toString().isEmpty) ? 'END' : data['clock'],
     this.startTime = DateTime.parse(data['startTimeUTC']).toLocal(),    
     this.period = Period.values[data['period']['current']],
     // We subtract 1 because in API status starts at 1, but enums starts at 0

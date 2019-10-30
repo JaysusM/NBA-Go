@@ -66,6 +66,9 @@ class PlayerListBloc extends Bloc<PlayerListEvent, PlayerListState> {
       yield PlayerListLoading();
       try {
         List<Player> players = await playerListRepository.fetchPlayerList();
+
+        // NBA API has some free agents or retired players without team, we will ignore them
+        players = players.where((Player player) => player.teamId.isNotEmpty).toList();
         this.allLoadedPlayers = this.shownPlayers = players;
         this.selectedTeam = null;
         yield PlayerListLoaded(players: players);

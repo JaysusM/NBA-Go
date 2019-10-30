@@ -104,8 +104,8 @@ class App extends StatelessWidget {
                 textTheme: TextTheme(
                   body1: TextStyle(
                       fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w200,
-                      color: const Color(0xFF333349),
+                      fontWeight: FontWeight.w300,
+                      color: Colors.black,
                       fontSize: 17.0),
                   caption: TextStyle(
                       fontFamily: 'Roboto',

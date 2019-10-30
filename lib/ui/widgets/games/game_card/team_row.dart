@@ -20,7 +20,7 @@ class TeamRow extends StatelessWidget {
     double logoWidth = textStyle.fontSize + 5;
 
     if(this.gameStatus == GameStatus.FINISHED && team.isWinner)
-      textStyle = textStyle.copyWith(fontWeight: FontWeight.w300);
+      textStyle = textStyle.copyWith(fontWeight: FontWeight.w500);
 
     return BlocBuilder(
       bloc: teamListBloc,
@@ -47,7 +47,7 @@ class TeamRow extends StatelessWidget {
                         (rowTeam.isNBAFranchise) ? rowTeam.tricode.toUpperCase() + '.png' : 'nba.gif'
                         }", width: logoWidth
                       ),
-                      Container(width: 5.0),
+                      Container(width: 7.0),
                       Text(
                         rowTeam.fullName,
                         style: textStyle

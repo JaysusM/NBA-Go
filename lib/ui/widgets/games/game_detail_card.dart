@@ -170,8 +170,8 @@ class GameDetailCardState extends State<GameDetailCard> {
         children: <Widget>[
           Image.asset(
             "assets/logos/${tricode.toUpperCase()}.png",
-            width: 20.0,
-            height: 20.0,
+            width: 30.0,
+            height: 30.0,
           ),
           Container(
             child: Text(tricode, style: textStyle),
