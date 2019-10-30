@@ -255,7 +255,7 @@ class GameDetailCardState extends State<GameDetailCard> {
                       borderRadius: BorderRadius.circular(25.0),
                       color: Colors.red),
                 )
-              : Container(),
+              : Container(width: 4.0),
           Container(width: 5.0),
           CircleAvatar(
               backgroundColor: Colors.white,
@@ -271,7 +271,7 @@ class GameDetailCardState extends State<GameDetailCard> {
                 Text(player.firstName),
                 SizedBox(
                     child:
-                        Text(player.lastName, overflow: TextOverflow.ellipsis),
+                        Text(player.lastName, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
                     width: _PLAYER_NAME_WIDTH)
               ])
         ]),
