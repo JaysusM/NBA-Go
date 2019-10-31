@@ -1,6 +1,6 @@
 # NBA Go
 
-[![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/android/app/src/main/res/mipmap-xxxhdpi/nba_go.png)](https://github.com/JaysusM/NBA-Go/releases/download/v1/NBA-Go-v1.apk)
+[![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/android/app/src/main/res/mipmap-xxxhdpi/nba_go.png)](https://github.com/JaysusM/NBA-Go/releases/download/v1.1/NBA_Go_v1_1.apk)
 
 ## What is NBA Go?
 NBA Go is an NBA fan-made app, that shows realtime nba scoreboard with realtime player stats. It also includes a selectable date calendar to show all NBA games, a page to visualize east and west conferences standings and a player searcher screen (that can be filtered by teams and/or value) where we can check all the player NBA stats along its career.
