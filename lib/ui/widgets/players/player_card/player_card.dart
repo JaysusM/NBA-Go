@@ -64,10 +64,7 @@ class PlayerCard extends StatelessWidget {
 
   void _showPlayerDetailPage(BuildContext parentContext) {
     Navigator.of(parentContext).push(CupertinoPageRoute(
-      builder: (BuildContext context) {
-        PlayerDetailBloc playerDetailBloc = BlocProvider.of<PlayerDetailBloc>(parentContext);
-        return PlayerDetailScreen(playerDetailBloc: playerDetailBloc, player: this.player);            
-      }
+      builder: (_) => PlayerDetailScreen(player: this.player)
     ));
   }
 }

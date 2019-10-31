@@ -53,13 +53,17 @@ class GameListViewState extends State<GameListView> {
           gameListBloc.dispatch(FetchGameList());
           return LoadingWidget();
         } else if (state is GameListLoading) {
-          return (this._games != null) ? gameList() : LoadingWidget();
+          return (this._games != null)
+              ? Stack(children: <Widget>[LoadingWidget(), gameList()])
+              : LoadingWidget();
         } else if (state is GameListLoaded) {
           final List<Game> games = state.games;
           this._games = games;
-          if(this._games.any((Game game) => game.status == GameStatus.PLAYING)) {
+          if (this
+              ._games
+              .any((Game game) => game.status == GameStatus.PLAYING)) {
             this._initializeTimer();
-          } else if(this._refreshTimer != null) {
+          } else if (this._refreshTimer != null) {
             this._refreshTimer.cancel();
           }
           return gameList();

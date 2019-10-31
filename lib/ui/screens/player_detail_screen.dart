@@ -6,15 +6,14 @@ import 'package:nba_go/ui/widgets/widgets.dart';
 
 class PlayerDetailScreen extends StatelessWidget {
   final Player player;
-  final PlayerDetailBloc playerDetailBloc;
 
   const PlayerDetailScreen(
-      {@required this.playerDetailBloc, @required this.player})
-      : assert(playerDetailBloc != null),
-        assert(player != null);
+      {@required this.player})
+      : assert(player != null);
 
   @override
   Widget build(BuildContext context) {
+    PlayerDetailBloc playerDetailBloc = BlocProvider.of<PlayerDetailBloc>(context);
     playerDetailBloc.dispatch(FetchPlayerDetail(player: this.player));
     return SafeArea(
         child: Scaffold(
