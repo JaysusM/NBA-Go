@@ -31,7 +31,7 @@ class GameListViewState extends State<GameListView> {
   }
 
   void _initializeTimer() {
-    Timer.periodic(Duration(seconds: 15), (_) {
+    this._refreshTimer = Timer.periodic(Duration(seconds: 15), (_) {
       this.setState(() {
         this._refresh = true;
       });
@@ -42,7 +42,7 @@ class GameListViewState extends State<GameListView> {
   Widget build(BuildContext context) {
     GameListBloc gameListBloc = BlocProvider.of<GameListBloc>(context);
     if (this._refresh) {
-      gameListBloc.dispatch(FetchGameList());
+      gameListBloc.dispatch(RefreshGameList());
       this._refresh = false;
     }
 
@@ -54,7 +54,7 @@ class GameListViewState extends State<GameListView> {
           return LoadingWidget();
         } else if (state is GameListLoading) {
           return (this._games != null)
-              ? Stack(children: <Widget>[LoadingWidget(), gameList()])
+              ? Stack(children: <Widget>[gameList(), LoadingWidget()])
               : LoadingWidget();
         } else if (state is GameListLoaded) {
           final List<Game> games = state.games;
