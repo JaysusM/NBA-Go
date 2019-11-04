@@ -14,12 +14,11 @@ class GameListView extends StatefulWidget {
 class GameListViewState extends State<GameListView> {
   Completer _refreshCompleter;
   Timer _refreshTimer;
-  bool _refresh;
+  GameListBloc _gameListBloc;
   List<Game> _games;
 
   @override
   void initState() {
-    this._refresh = false;
     this._refreshCompleter = Completer<void>();
     super.initState();
   }
@@ -32,25 +31,19 @@ class GameListViewState extends State<GameListView> {
 
   void _initializeTimer() {
     this._refreshTimer = Timer.periodic(Duration(seconds: 15), (_) {
-      this.setState(() {
-        this._refresh = true;
-      });
+      this._gameListBloc.dispatch(RefreshGameList());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    GameListBloc gameListBloc = BlocProvider.of<GameListBloc>(context);
-    if (this._refresh) {
-      gameListBloc.dispatch(RefreshGameList());
-      this._refresh = false;
-    }
+    this._gameListBloc = BlocProvider.of<GameListBloc>(context);
 
     return BlocBuilder(
-      bloc: gameListBloc,
+      bloc: this._gameListBloc,
       builder: (_, GameListState state) {
         if (state is GameListEmpty) {
-          gameListBloc.dispatch(FetchGameList());
+          this._gameListBloc.dispatch(FetchGameList());
           return LoadingWidget();
         } else if (state is GameListLoading) {
           return (this._games != null)
@@ -59,12 +52,13 @@ class GameListViewState extends State<GameListView> {
         } else if (state is GameListLoaded) {
           final List<Game> games = state.games;
           this._games = games;
-          if (this
-              ._games
-              .any((Game game) => game.status == GameStatus.PLAYING)) {
+          bool anyLiveGame = this
+                  ._games
+                  .any((Game game) => game.status == GameStatus.PLAYING);
+          if (anyLiveGame && (this._refreshTimer == null || !this._refreshTimer.isActive)) {
             this._initializeTimer();
-          } else if (this._refreshTimer != null) {
-            this._refreshTimer.cancel();
+          } else if (!anyLiveGame && this._refreshTimer != null) {
+              this._refreshTimer.cancel();
           }
           return gameList();
         } else if (state is GameListError) {
@@ -93,7 +87,7 @@ class GameListViewState extends State<GameListView> {
               style: Theme.of(context).textTheme.body2,
             )),
       onRefresh: () {
-        BlocProvider.of<GameListBloc>(context).dispatch(RefreshGameList());
+        this._gameListBloc.dispatch(RefreshGameList());
         return this._refreshCompleter.future;
       },
     );
