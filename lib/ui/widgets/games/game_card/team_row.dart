@@ -10,63 +10,53 @@ class TeamRow extends StatelessWidget {
   final GameStatus gameStatus;
 
   TeamRow({@required this.team, @required this.gameStatus})
-    : assert(team != null),
-      assert(gameStatus != null);
+      : assert(team != null),
+        assert(gameStatus != null);
 
   @override
   Widget build(BuildContext context) {
     TeamListBloc teamListBloc = BlocProvider.of<TeamListBloc>(context);
-    TextStyle textStyle = Theme.of(context).textTheme.body1;    
+    TextStyle textStyle = Theme.of(context).textTheme.body1;
     double logoWidth = textStyle.fontSize + 5;
 
-    if(this.gameStatus == GameStatus.FINISHED && team.isWinner)
+    if (this.gameStatus == GameStatus.FINISHED && team.isWinner)
       textStyle = textStyle.copyWith(fontWeight: FontWeight.w500);
 
     return BlocBuilder(
       bloc: teamListBloc,
       builder: (BuildContext context, TeamListState state) {
-        if(state is TeamListEmpty) {
+        if (state is TeamListEmpty) {
           teamListBloc.dispatch(FetchTeamList());
-          return Center(
-            child: Text('No teams loaded')
-            );
+          return Center(child: Text('No teams loaded'));
         } else if (state is TeamListLoading) {
-          return LoadingWidget();
+          return Container(
+              child: Center(child: Text("-")), margin: EdgeInsets.all(5.0));
         } else if (state is TeamListLoaded) {
           List<Team> teams = state.teams;
-          Team rowTeam = teams.firstWhere((team) => team.teamId == this.team.teamId);
+          Team rowTeam =
+              teams.firstWhere((team) => team.teamId == this.team.teamId);
           return Container(
-            margin: EdgeInsets.all(5.0),
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Align(
-                  child: Row(
-                    children: <Widget>[ 
-                      Image.asset("assets/logos/${
-                        (rowTeam.isNBAFranchise) ? rowTeam.tricode.toUpperCase() + '.png' : 'nba.gif'
-                        }", width: logoWidth
+              margin: EdgeInsets.all(5.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Align(
+                      child: Row(
+                        children: <Widget>[
+                          Image.asset(
+                              "assets/logos/${(rowTeam.isNBAFranchise) ? rowTeam.tricode.toUpperCase() + '.png' : 'nba.gif'}",
+                              width: logoWidth),
+                          Container(width: 7.0),
+                          Text(rowTeam.fullName, style: textStyle)
+                        ],
                       ),
-                      Container(width: 7.0),
-                      Text(
-                        rowTeam.fullName,
-                        style: textStyle
-                      )
-                    ],
-                  ),
-                  alignment: Alignment.centerLeft
-                ),
-                Align(
-                  child: Text(
-                    team.score.toString(),
-                    style: textStyle
-                  ),
-                  alignment: Alignment.centerRight
-                )
-              ],
-            )
-          );
-        } else if(state is TeamListError) {
+                      alignment: Alignment.centerLeft),
+                  Align(
+                      child: Text(team.score.toString(), style: textStyle),
+                      alignment: Alignment.centerRight)
+                ],
+              ));
+        } else if (state is TeamListError) {
           print(state.error);
           return ErrorMessageWidget(error: 'Error loading team list');
         }
