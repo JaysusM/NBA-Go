@@ -38,7 +38,7 @@ class GameCard extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 2.5),
           padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.5),
         ),
-        onTap: () => (game.status == GameStatus.NOTSTARTED) ? null : _showGameDetail(context));
+        onTap: () => (game.status == GameStatus.NOT_STARTED) ? null : _showGameDetail(context));
   }
 
   void _showGameDetail(BuildContext parentContext) {

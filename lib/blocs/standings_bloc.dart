@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:nba_go/models/models.dart';
+import 'package:nba_go/models/playoffs_series.dart';
 import 'package:nba_go/repositories/standings_repository.dart';
 
 abstract class StandingListEvent extends Equatable {
@@ -26,8 +27,9 @@ class StandingListError extends StandingListState {
 }
 class StandingListLoaded extends StandingListState {
   final List<TeamStanding> standings;
+  final List<PlayoffsSeries> playoffsSeries;
 
-  StandingListLoaded({@required this.standings})
+  StandingListLoaded({@required this.standings, @required this.playoffsSeries})
     : assert(standings != null),
       super([standings]);
 
@@ -36,6 +38,7 @@ class StandingListLoaded extends StandingListState {
 class StandingListBloc extends Bloc<StandingListEvent, StandingListState> {
   final StandingsRepository standingRepository;
   List<TeamStanding> standings;
+  List<PlayoffsSeries> playoffsSeries;
 
   StandingListBloc({@required this.standingRepository})
     : assert(standingRepository != null);
@@ -50,7 +53,9 @@ class StandingListBloc extends Bloc<StandingListEvent, StandingListState> {
       try {
         final List<TeamStanding> standings = await standingRepository.fetchConferenceStandings();
         this.standings = standings;
-        yield StandingListLoaded(standings: standings);
+        final List<PlayoffsSeries> playoffsSeries = await standingRepository.fetchPlayoffsSeries();
+        this.playoffsSeries = playoffsSeries;
+        yield StandingListLoaded(standings: standings, playoffsSeries: playoffsSeries);
       } catch (error) {
         yield StandingListError(error: error.toString());
       }

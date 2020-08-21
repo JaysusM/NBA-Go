@@ -84,6 +84,24 @@ class NBAApiClient {
     return PlayerDetail.fromJSON(playerDetailJSON, player);
   }
 
+  Future<List<PlayoffsSeries>> fetchPlayoffSeries() async {
+    final NBALinks nbaLinks = await NBALinks.nbaLinks;
+    const int PLAYOFFS_STAGE = 4;
+    if (nbaLinks.stage == PLAYOFFS_STAGE) {
+      final String playoffsSeriesURL = '$baseURL${nbaLinks.playoffsBracket}';
+      final playoffsBracketResponse = await this.httpClient.get(playoffsSeriesURL);
+      if (playoffsBracketResponse.statusCode != 200)
+        throw new Exception('Error getting playoffs bracket');
+
+      final Map<String, dynamic> playoffsSeriesJSON = jsonDecode(playoffsBracketResponse.body);
+      List<PlayoffsSeries> playoffsSeries = List<PlayoffsSeries>();
+      playoffsSeriesJSON['series'].forEach((serie) => playoffsSeries.add(PlayoffsSeries.fromJSON(serie)));
+      return playoffsSeries;
+    }
+
+    return [];
+  }
+
   Future<List<TeamStanding>> fetchConferenceStandings() async {
     final NBALinks nbaLinks = await NBALinks.nbaLinks;
     final String standingsConferenceURL = '$baseURL${nbaLinks.standingsConference}';

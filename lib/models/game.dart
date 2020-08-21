@@ -1,5 +1,5 @@
 enum GameStatus {
-  NOTSTARTED,
+  NOT_STARTED,
   PLAYING,
   FINISHED
 }

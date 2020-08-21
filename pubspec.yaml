@@ -3,7 +3,7 @@ description: An unofficial NBA app.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -21,16 +21,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^0.1.9
-
-flutter_native_splash:
-  image: assets/splash.png
-  color: "#B3002B"
 
 flutter:
   uses-material-design: true
 
   assets:
+   - assets/splash.png
    - assets/logos/
    - assets/player_placeholder.png
   

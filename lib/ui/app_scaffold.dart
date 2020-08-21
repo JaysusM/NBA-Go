@@ -66,9 +66,9 @@ class AppScaffoldState extends State<AppScaffold> {
                 this._currentIndex = index;
                 this._pageController.animateToPage(
                   index,
-                  curve: Curves.bounceOut,
+                  curve: Curves.ease,
                   duration: Duration(milliseconds: 700));
-              }), 
+              }),
               items: <BottomNavyBarItem>[
                 BottomNavyBarItem(
                   activeColor: Theme.of(context).toggleableActiveColor,

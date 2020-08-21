@@ -10,6 +10,16 @@ class PlayerStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SeasonStats currentSeasonStats;
+    try {
+      currentSeasonStats = playerDetail.allSeasonStats[0];
+    } catch (exception) {
+      currentSeasonStats = null;
+    }
+    if (currentSeasonStats?.seasonYear != playerDetail.currentSeasonStats.seasonYear) {
+      currentSeasonStats = playerDetail.currentSeasonStats;
+    }
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -19,15 +29,15 @@ class PlayerStats extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: SingleStatWidget(
-                    name: 'PPG', value: playerDetail.currentSeasonStats.ppg),
+                    name: 'PPG', value: currentSeasonStats.ppg),
                 flex: 1),
             Expanded(
                 child: SingleStatWidget(
-                    name: 'RPG', value: playerDetail.currentSeasonStats.rpg),
+                    name: 'RPG', value: currentSeasonStats.rpg),
                 flex: 1),
             Expanded(
                 child: SingleStatWidget(
-                    name: 'APG', value: playerDetail.currentSeasonStats.apg),
+                    name: 'APG', value: currentSeasonStats.apg),
                 flex: 1),
           ],
         ),
@@ -36,15 +46,15 @@ class PlayerStats extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: SingleStatWidget(
-                    name: 'SPG', value: playerDetail.currentSeasonStats.spg),
+                    name: 'SPG', value: currentSeasonStats.spg),
                 flex: 1),
             Expanded(
                 child: SingleStatWidget(
-                    name: 'BPG', value: playerDetail.currentSeasonStats.bpg),
+                    name: 'BPG', value: currentSeasonStats.bpg),
                 flex: 1),
             Expanded(
                 child: SingleStatWidget(
-                    name: 'TOPG', value: playerDetail.currentSeasonStats.topg),
+                    name: 'TOPG', value: currentSeasonStats.topg),
                 flex: 1),
           ],
         )

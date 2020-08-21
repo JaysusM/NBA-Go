@@ -1,6 +1,7 @@
 enum Conference {
   WEST,
-  EAST
+  EAST,
+  PLAYOFFS
 }
 
 class TeamStanding {

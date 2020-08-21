@@ -2,34 +2,34 @@ import 'models.dart';
 import 'package:meta/meta.dart';
 
 class PlayerDetail {
-  _SeasonStats _currentSeasonStats;
+  SeasonStats _currentSeasonStats;
   Player _player;
-  List<_SeasonStats> _allSeasonStats;
+  List<SeasonStats> _allSeasonStats;
 
   PlayerDetail.fromJSON(Map<String, dynamic> decodedJSON, this._player)
     : assert(_player != null) {
-    _allSeasonStats = new List<_SeasonStats>();
+    _allSeasonStats = new List<SeasonStats>();
     Map<String, dynamic> currentSeasonStatsJSON = decodedJSON['league']['standard']['stats']['latest'];
-    this._currentSeasonStats = _SeasonStats.fromJSON(currentSeasonStatsJSON, teamId: decodedJSON['league']['standard']['teamId']);
+    this._currentSeasonStats = SeasonStats.fromJSON(currentSeasonStatsJSON, teamId: decodedJSON['league']['standard']['teamId']);
 
     List<dynamic> allSeasons = decodedJSON['league']['standard']['stats']['regularSeason']['season'];
     for(dynamic season in allSeasons) {
-      season['teams'].forEach((dynamic teamSeason) => this._allSeasonStats.add(_SeasonStats.fromJSON(teamSeason, seasonYear: season['seasonYear'])));
+      season['teams'].forEach((dynamic teamSeason) => this._allSeasonStats.add(SeasonStats.fromJSON(teamSeason, seasonYear: season['seasonYear'])));
     }
   }
 
   Player get player => this._player;
-  _SeasonStats get currentSeasonStats => this._currentSeasonStats;
-  List<_SeasonStats> get allSeasonStats => this._allSeasonStats;
+  SeasonStats get currentSeasonStats => this._currentSeasonStats;
+  List<SeasonStats> get allSeasonStats => this._allSeasonStats;
 }
 
-class _SeasonStats {
+class SeasonStats {
   int _seasonYear;
   String _teamId;
   double _ppg, _rpg, _apg, _mpg, _topg, _spg, _bpg,
     _tpp, _ftp, _fgp, _plusMinus, _min;
 
-  _SeasonStats.fromJSON(Map<String, dynamic> decodedJSON, {int seasonYear, String teamId}) {
+  SeasonStats.fromJSON(Map<String, dynamic> decodedJSON, {int seasonYear, String teamId}) {
     this._seasonYear = (seasonYear != null) ? seasonYear : decodedJSON['seasonYear'];
     this._teamId = (teamId != null) ? teamId : decodedJSON['teamId'];
     this._ppg = _parseStat(statName: 'ppg', statMap: decodedJSON);

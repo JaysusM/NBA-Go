@@ -11,3 +11,4 @@ export 'players/player_detail_banner/player_detail_banner.dart';
 export 'players/player_stats/player_stats.dart';
 export 'teams/top_three_teams.dart';
 export 'players/player_card/player_seasons.dart';
+export 'playoffs/bracket.dart';

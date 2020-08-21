@@ -25,7 +25,7 @@ class GameListViewState extends State<GameListView> {
 
   @override
   void dispose() {
-    this._refreshTimer.cancel();
+    this._refreshTimer?.cancel();
     super.dispose();
   }
 

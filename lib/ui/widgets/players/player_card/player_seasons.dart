@@ -44,11 +44,17 @@ class PlayerSeasons extends StatelessWidget {
   }
 
   List<DataRow> _getDataRows(List<Team> teams) {
-    return this
+    List<DataRow> rows = this
         .playerDetail
         .allSeasonStats
         .map((season) {
-          Team team = teams.firstWhere((team) => team.teamId == season.teamId);
+          Team team;
+          try {
+            team = teams.firstWhere((team) =>
+            team.teamId == season.teamId);
+          } catch (exception) {
+            return null;
+          }
           return DataRow(cells: <DataCell>[
               DataCell(Text(season.seasonYear.toString())),
               DataCell(Text(team.tricode.toUpperCase())),
@@ -63,5 +69,9 @@ class PlayerSeasons extends StatelessWidget {
             ]);
         })
         .toList();
+
+    rows.removeWhere((row) => row == null);
+
+    return rows;
   }
 }

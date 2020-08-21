@@ -11,4 +11,8 @@ class StandingsRepository {
   Future<List<TeamStanding>> fetchConferenceStandings() async {
     return nbaApiClient.fetchConferenceStandings();
   }
+
+  Future<List<PlayoffsSeries>> fetchPlayoffsSeries() async {
+    return nbaApiClient.fetchPlayoffSeries();
+  }
 }

@@ -5,3 +5,4 @@ export 'player.dart';
 export 'player_detail.dart';
 export 'game_detail.dart';
 export 'standing.dart';
+export 'playoffs_series.dart';

@@ -22,7 +22,7 @@ class GameInfo extends StatelessWidget {
 
     List<Widget> infoContent;
     switch (this.gameStatus) {
-      case GameStatus.NOTSTARTED:
+      case GameStatus.NOT_STARTED:
         infoContent = <Widget>[
           Text(startTimeString, style: Theme.of(context).textTheme.body1),
           separator,

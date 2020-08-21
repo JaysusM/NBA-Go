@@ -21,14 +21,15 @@ class StandingsScreen extends StatelessWidget {
           return LoadingWidget();
         } else if (state is StandingListLoading) {
           List<TeamStanding> standings = standingListBloc.standings;
-          if (standings == null) {
+          List<PlayoffsSeries> series = standingListBloc.playoffsSeries;
+          if (standings == null || series == null) {
             return LoadingWidget();
           } else {
             bool isLoadingParam = true;
-            return StandingsScreenView(standings, isLoadingParam);
+            return StandingsScreenView(standings, series, isLoadingParam);
           }
         } else if (state is StandingListLoaded)
-          return StandingsScreenView(state.standings);
+          return StandingsScreenView(state.standings, state.playoffsSeries);
         else if (state is StandingListError)
           return ErrorMessageWidget(error: state.error);
         return ErrorMessageWidget(error: 'Unknown state $state');
@@ -39,10 +40,11 @@ class StandingsScreen extends StatelessWidget {
 
 class StandingsScreenView extends StatefulWidget {
   final List<TeamStanding> standings;
+  final List<PlayoffsSeries> playoffsSeries;
   final bool isLoading;
 
-  StandingsScreenView(this.standings, [this.isLoading = false])
-      : assert(standings != null);
+  StandingsScreenView(this.standings, this.playoffsSeries,
+      [this.isLoading = false]);
 
   @override
   State<StatefulWidget> createState() => StandingsScreenViewState();
@@ -55,17 +57,23 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
   @override
   void initState() {
     super.initState();
-    this.selectedConference = Conference.EAST;
+    if (widget.playoffsSeries.length != 0)
+      this.selectedConference = Conference.PLAYOFFS;
+    else
+      this.selectedConference = Conference.EAST;
   }
 
   @override
   Widget build(BuildContext context) {
     TeamListBloc teamListBloc = BlocProvider.of<TeamListBloc>(context);
     List<Team> teamList = (teamListBloc.currentState as TeamListLoaded).teams;
-    List<TeamStanding> selectedConferenceTeams = widget.standings
-        .where((teamStanding) =>
-            teamStanding.conference == this.selectedConference)
-        .toList();
+    List<TeamStanding> selectedConferenceTeams =
+        (this.selectedConference != Conference.PLAYOFFS)
+            ? widget.standings
+                .where((teamStanding) =>
+                    teamStanding.conference == this.selectedConference)
+                .toList()
+            : widget.standings;
     Set<TeamStanding> orderedTeams = Set();
 
     for (int i = 1; i <= TEAMS_PER_CONFERENCE; i++) {
@@ -88,31 +96,20 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          conferenceSelector("assets/logos/WEST.png", Conference.WEST),
-                          conferenceSelector("assets/logos/EAST.png", Conference.EAST)
+                          conferenceSelector(
+                              "assets/logos/WEST.png", Conference.WEST),
+                          conferenceSelector(
+                              "assets/logos/nba.gif", Conference.PLAYOFFS),
+                          conferenceSelector(
+                              "assets/logos/EAST.png", Conference.EAST)
                         ],
                       ),
                       color: Theme.of(context).backgroundColor,
                       height: 70.0,
                       padding: EdgeInsets.symmetric(vertical: 10.0)),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.elliptical(70, 80),
-                        )),
-                    height: 200.0,
-                    padding: EdgeInsets.only(top: 15.0, bottom: 10.0),
-                    child: TopThreeTeamsStandings(
-                        teamIterator: teamIterator, teamList: teamList),
-                  ),
-                  Expanded(
-                      child: Container(
-                          color: Colors.white,
-                          child: this.standingsList(teamIterator, teamList),
-                          margin: EdgeInsets.only(
-                              left: 40.0, top: 10.0, right: 10.0)))
-                ],
+                ]..addAll((this.selectedConference != Conference.PLAYOFFS)
+                    ? standingsListWidget(teamIterator, teamList)
+                    : [Bracket(playoffsSeries: widget.playoffsSeries, teams: teamList)]),
               ),
               color: Colors.white)),
       (widget.isLoading) ? LoadingWidget() : Container()
@@ -124,6 +121,28 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
     Team team =
         teams.firstWhere((team) => iterator.current.teamId == team.teamId);
     return "assets/logos/${team.tricode.toUpperCase()}.png";
+  }
+
+  List<Widget> standingsListWidget(
+      Iterator<TeamStanding> teamIterator, List<Team> teamList) {
+    return [
+      Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.elliptical(70, 80),
+            )),
+        height: 200.0,
+        padding: EdgeInsets.only(top: 15.0, bottom: 10.0),
+        child: TopThreeTeamsStandings(
+            teamIterator: teamIterator, teamList: teamList),
+      ),
+      Expanded(
+          child: Container(
+              color: Colors.white,
+              child: this.standingsList(teamIterator, teamList),
+              margin: EdgeInsets.only(left: 40.0, top: 10.0, right: 10.0)))
+    ];
   }
 
   Widget conferenceSelector(String conferenceLogo, Conference conference) {

@@ -260,7 +260,7 @@ class GameDetailCardState extends State<GameDetailCard> {
           CircleAvatar(
               backgroundColor: Colors.white,
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/players_placeholder.png",
+                placeholder: "assets/player_placeholder.png",
                 image: NBALinks.getPlayerProfilePic(player.personId),
               )),
           Container(width: 10.0),
