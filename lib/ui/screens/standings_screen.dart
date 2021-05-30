@@ -6,6 +6,11 @@ import 'package:nba_go/models/models.dart';
 import 'package:nba_go/ui/widgets/widgets.dart';
 
 class StandingsScreen extends StatelessWidget {
+
+  int stage;
+
+  StandingsScreen({@required this.stage});
+
   @override
   Widget build(BuildContext context) {
     StandingListBloc standingListBloc =
@@ -26,10 +31,10 @@ class StandingsScreen extends StatelessWidget {
             return LoadingWidget();
           } else {
             bool isLoadingParam = true;
-            return StandingsScreenView(standings, series, isLoadingParam);
+            return StandingsScreenView(standings, series, stage, isLoadingParam);
           }
         } else if (state is StandingListLoaded)
-          return StandingsScreenView(state.standings, state.playoffsSeries);
+          return StandingsScreenView(state.standings, state.playoffsSeries, stage);
         else if (state is StandingListError)
           return ErrorMessageWidget(error: state.error);
         return ErrorMessageWidget(error: 'Unknown state $state');
@@ -42,8 +47,9 @@ class StandingsScreenView extends StatefulWidget {
   final List<TeamStanding> standings;
   final List<PlayoffsSeries> playoffsSeries;
   final bool isLoading;
+  final int stage;
 
-  StandingsScreenView(this.standings, this.playoffsSeries,
+  StandingsScreenView(this.standings, this.playoffsSeries, this.stage,
       [this.isLoading = false]);
 
   @override
@@ -98,8 +104,8 @@ class StandingsScreenViewState extends State<StandingsScreenView> {
                         children: <Widget>[
                           conferenceSelector(
                               "assets/logos/WEST.png", Conference.WEST),
-                          conferenceSelector(
-                              "assets/logos/nba.gif", Conference.PLAYOFFS),
+                          (widget.stage == 3) ? conferenceSelector(
+                              "assets/logos/nba.gif", Conference.PLAYOFFS) : Container(),
                           conferenceSelector(
                               "assets/logos/EAST.png", Conference.EAST)
                         ],

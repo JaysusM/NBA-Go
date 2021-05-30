@@ -35,6 +35,7 @@ class AppScaffoldState extends State<AppScaffold> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if(snapshot.hasData) {
           DateTime currentDate = snapshot.data.currentDate;
+          int stage = snapshot.data.stage;
           return Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             appBar: AppBar(
@@ -53,7 +54,7 @@ class AppScaffoldState extends State<AppScaffold> {
               controller: this._pageController,
               children: <Widget>[
                 GameScreen(currentDate: currentDate),
-                StandingsScreen(),
+                StandingsScreen(stage: stage),
                 PlayersScreen()
               ],
             ),
