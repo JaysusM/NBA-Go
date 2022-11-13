@@ -1,5 +1,10 @@
 # NBA Go
 
+### ⚠️ Dead project ⚠️
+#### Unluckily the NBA closed the official public API I was using, so app is no longer working. I used it daily to track results and players and worked properly until the API was closed (12/Nov 2022). I am insanely happy with myself for being able to complete this project :)
+
+---
+
 [![](https://raw.githubusercontent.com/JaysusM/NBA-Go/master/android/app/src/main/res/mipmap-xxxhdpi/nba_go.png)](https://github.com/JaysusM/NBA-Go/releases/download/v1.1/NBA_Go_v1_1.apk)
 
 ## What is NBA Go?
